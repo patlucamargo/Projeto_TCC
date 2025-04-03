@@ -1,0 +1,333 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(217, 204, 224);
+  color: white;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.project-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+.logout-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background-color: #e64a19;
+}
+
+/* Main Container */
+.main-container {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+  color: rgb(68, 36, 247);
+}
+
+/* Summary Section */
+.summary {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.card {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: rgb(68, 36, 247);
+}
+
+.card p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Navegação de mês */
+.mes-navegacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mes-navegacao h2 {
+  margin: 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.nav-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background-color: #3c3aba;
+}
+
+/* Tabela de visualização */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+table th {
+  background-color: #f5f5f5;
+}
+
+
+table td input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/*Formulario Despesa */
+.form-container {
+  position: fixed;  /* fixed para cobrir toda a tela */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;  /* DEixa o formulario inicialmente oculto */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;  /* Para garantir que fique acima de outros elementos */
+}
+
+/*Estilização do formulario*/
+.formulario {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.form-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.form-header h2 {
+font-size: 20px;
+color: rgb(68, 36, 247);
+}
+
+.close-btn {
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+}
+
+.form-group {
+margin-bottom: 15px;
+}
+
+.form-group label {
+display: block;
+font-weight: bold;
+margin-bottom: 5px;
+
+}
+
+label {
+font-weight: bold;
+margin-bottom: 5px;
+
+}
+
+.form-row {
+display: flex;
+gap: 15px; /* Espaço entre os itens */
+justify-content: space-between; /* Mantém uma boa distribuição */
+
+}
+
+.form-column {
+flex: 1; /* Cada coluna ocupa o mesmo espaço */
+display: flex;
+flex-direction: column;
+
+}
+
+.valor-input {
+display: flex;
+align-items: center;    
+}
+
+.valor-input .currency {
+font-size: 18px;
+margin-right: 10px;
+}
+
+.valor-input input {
+flex: 1;
+padding: 5px;
+font-size: 16px;
+border: 1px solid #edb9fd;
+border-radius: 5px;
+}
+
+.toggle-switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 20px;
+}
+
+.toggle-switch input {
+display: none;
+}
+
+.switch-slider {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+border-radius: 20px;
+transition: 0.4s;
+}
+
+.switch-slider:before {
+position: absolute;
+content: "";
+height: 14px;
+width: 14px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+border-radius: 50%;
+transition: 0.4s;
+}
+
+input:checked + .switch-slider {
+background-color: #4f46e5;
+}
+
+input:checked + .switch-slider:before {
+transform: translateX(20px);
+}
+
+/* Botões do formulario */
+.submit-btn {
+background-color: #4f46e5;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.submit-btn:hover {
+background-color: #3c3aba;
+}
+
+.cancel-btn {
+background: none;
+border: none;
+color: #888;
+cursor: pointer;
+margin-left: 10px;
+}
+
+.cancel-btn:hover {
+color: #555;
+}
+
+
+input {
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 14px;
+width: 100%;
+}
