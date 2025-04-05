@@ -1,12 +1,12 @@
 <?php
 
-class Despesas
+class Receitas
 {
-    private $id_Despesa;
+    private $id_Receita;
     private $categoria;
-    private $descricao;
+    private $data_registro;
     private $valor;
-    private $dataVenc;
+    private $numParcels;
     private $pago;
     private $id_usuario;
     private $pdo;
@@ -21,14 +21,14 @@ class Despesas
         $this->categoria = $categoria;
     }
 
-    public function getDescricao()
+    public function getData_registro()
     {
-        return $this->descricao;
+        return $this->data_registro;
     }
 
-    public function setDescricao($descricao)
+    public function setData_registro($data_registro)
     {
-        $this->descricao = $descricao;
+        $this->data_registro = $data_registro;
     }
 
     public function getValor()
@@ -41,14 +41,14 @@ class Despesas
         $this->valor = $valor;
     }
 
-    public function getDataVenc()
+    public function getNumParcels()
     {
-        return $this->dataVenc;
+        return $this->numParcels;
     }
 
-    public function setDataVenc($dataVenc)
+    public function setNumParcels($numParcels)
     {
-        $this->dataVenc = $dataVenc;
+        $this->numParcels = $numParcels;
     }
 
     public function getPago()
@@ -88,9 +88,9 @@ class Despesas
 
     }
 
-    public function somaDespesas($id_usuario)
+    public function somaReceitas($id_usuario)
     {
-        $sql = "SELECT SUM(valor) FROM despesas WHERE id_usuario = :id_usuario";
+        $sql = "SELECT SUM(valor) FROM receitas WHERE id_usuario = :id_usuario";
         $inserir = $this->pdo->prepare($sql);
         $inserir->bindParam(':id_usuario', $id_usuario);
         $inserir->execute();

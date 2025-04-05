@@ -17,7 +17,25 @@ class Usuario{
         $this->login = $login;
     }
 
-    ///
+    public function getSenha()
+    {
+        return $this->senha;
+    }
+
+    public function setSenha($senha)
+    {
+        $this->senha = $senha;
+    }
+
+    public function getNivel_acesso()
+    {
+        return $this->nivel_acesso;
+    }
+
+    public function setNivel_acesso($nivel_acesso)
+    {
+        $this->login = $nivel_acesso;
+    }
 
     public function __construct()
     {

@@ -65,9 +65,8 @@ CREATE TABLE IF NOT EXISTS `famfinan`.`despesas` (
   `dataVenc` DATE NULL DEFAULT NULL,
   `pago` VARCHAR(10) NOT NULL,
   `id_usuario` INT NOT NULL,
-  `usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `usuario_id`),
-  INDEX `fk_despesas_usuario1_idx` (`usuario_id` ASC) VISIBLE)
+  PRIMARY KEY (`id`, `id_usuario`),
+  INDEX `fk_despesas_usuario1_idx` (`id_usuario` ASC) VISIBLE)
 ENGINE = MyISAM
 AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb4
@@ -78,7 +77,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `famfinan`.`gruposfamiliar`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `famfinan`.`gruposfamiliar` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_grupo_familiar` INT NOT NULL AUTO_INCREMENT,
   `administrador` VARCHAR(100) NULL DEFAULT NULL,
   `nome` VARCHAR(100) NULL DEFAULT NULL,
   `percentual` DOUBLE NULL DEFAULT NULL,
@@ -102,9 +101,8 @@ CREATE TABLE IF NOT EXISTS `famfinan`.`receitas` (
   `numParcelas` INT NOT NULL,
   `pago` VARCHAR(10) NOT NULL,
   `id_usuario` INT NOT NULL,
-  `usuario_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `usuario_id`),
-  INDEX `fk_receitas_usuario1_idx` (`usuario_id` ASC) VISIBLE)
+   PRIMARY KEY (`id`, `id_usuario`),
+  INDEX `fk_receitas_usuario1_idx` (`id_usuario` ASC) VISIBLE)
 ENGINE = MyISAM
 AUTO_INCREMENT = 26
 DEFAULT CHARACTER SET = utf8mb4
