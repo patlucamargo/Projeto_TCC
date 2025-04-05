@@ -10,7 +10,7 @@ include("config.php");
     $sqlSelect = "SELECT * FROM despesas WHERE id=$id";
 
     $result = $pdo->query($sqlSelect);
-
+//teste
     if ($result->num_rows > 0) {
         while ($user_data = mysqli_fetch_assoc($result)) {
 
