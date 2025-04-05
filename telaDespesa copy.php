@@ -4,7 +4,6 @@ include("config.php");
 
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
 
-  $id=$_SESSION['id_usuario'];
   unset($_SESSION['login']);
   unset($_SESSION['senha']);
   header('Location: telalogin.php');
