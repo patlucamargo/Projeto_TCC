@@ -9,6 +9,7 @@ if (isset($_POST['submit']) && !empty($_POST['login'] && !empty($_POST['senha'])
     $senha = $_POST['senha'];
 
     $conecta = $usuario = new Usuario();
+    
     if (!$conecta) {
         echo "Erro ao conectar ao banco de dados";
     } else {

@@ -1,27 +1,17 @@
 <?php
 
 if (isset($_POST['enviar'])) {
-    require 'Usuario.class.php';
-    $pdo = $usuario = new Usuario();
+    include_once('config.php');
 
-    if(!$pdo){
-        echo "<h1>Erro ao conectar com o banco. Tente novamente mais tarde!</h1>";
-    }else{
-        $nome       = $_POST['nome'];
-        $email      = $_POST['email'];
-        $senha      = $_POST['senha'];
-        $nascimento = $_POST['dat_nasc'];
-        $login      = $_POST['login'];
-        $grupo      = $_POST['grupo'];
-        $senha      = md5($senha);
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $data_nasc = $_POST['data_nasc'];
+    $grupo_familiar = $_POST['grupo_familiar'];
+    $login = $_POST['login'];
+    $senha = $_POST['senha'];
 
-        
-        $us = $usuario->cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login );
-        
-        if(!$us){
-            echo "<h1>Erro ao cadastrar usuário!</h1>";
-        }
-    }
+    $result = mysqli_query($pdo, "INSERT INTO usuario (nome_completo, email, dat_nasc, grupo_familiar, login, senha)
+    VALUES('$nome', '$email', '$data_nasc', '$grupo_familiar', '$login', '$senha')");
 
     header('Location: telaLogin.php');
 }
@@ -114,7 +104,7 @@ if (isset($_POST['enviar'])) {
 <a href="telaLogin.php">Voltar</a>
 
     <div class="box">
-        <form method="POST">
+        <form action="formularioCadastro.php" method="POST">
             <fieldset>
                 <legend><b>Formulário Cadastro</b></legend>   
                 <br>
@@ -131,7 +121,7 @@ if (isset($_POST['enviar'])) {
                 <br><br>
                      
                 <label for="data_nasc"><b>Data de Nascimento</b></label>
-                <input type="date" name="dat_nasc" id="data_nasc" required>
+                <input type="date" name="data_nasc" id="data_nasc" required>
                 <br><br> 
 
                 <div class="inputBox">

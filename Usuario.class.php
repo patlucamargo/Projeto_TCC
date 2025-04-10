@@ -45,6 +45,7 @@ class Usuario{
 
         try {
             $this->pdo = new PDO($dns, $username, $password);
+           
             return true;
         } catch (Exception $e) {
             echo "Erro ao conectar ao banco de dados: ";
@@ -53,7 +54,18 @@ class Usuario{
 
     }
 
-    public function cadastrarUsuario(){
+    public function cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login ){
+        
+        $sql = "INSERT INTO usuarios SET nome_completo=:n, email=:e, dat_nasc=:d, grupo_familiar = :g, senha = :s, login= :l ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':n', $nome);
+        $stmt->bindParam(':e', $email);
+        $stmt->bindParam(':d', $nascimento);
+        $stmt->bindParam(':g', $grupo);
+        $stmt->bindParam(':s', $senha);
+        $stmt->bindParam(':l', $login);
+        
+        return $stmt->execute();
 
     }
 
