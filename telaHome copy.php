@@ -19,7 +19,7 @@ $result_user = $stmt_user->get_result();
 if ($result_user->num_rows > 0) {
     $user = $result_user->fetch_assoc();
     $user_id = $user['id'];
-
+//teste
     // Despesas
     $sql_despesas = "SELECT SUM(valor) AS total_despesas FROM despesas WHERE id_usuario = ?";
     $stmt_despesas = $pdo->prepare($sql_despesas);
