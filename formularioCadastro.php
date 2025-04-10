@@ -2,24 +2,35 @@
 
 if (isset($_POST['enviar'])) {
     require 'Usuario.class.php';
-    $pdo = $usuario = new Usuario();
+    $con = $usuario = new Usuario();    
+    if(!$con){
+       echo "<script>
+                confirm('Erro ao conectar com o banco, tente mais tarde'
+            </script>";
 
-    if(!$pdo){
-        echo "<h1>Erro ao conectar com o banco. Tente novamente mais tarde!</h1>";
+       header("location: telalogin.php");
+
     }else{
         $nome       = $_POST['nome'];
         $email      = $_POST['email'];
         $senha      = $_POST['senha'];
         $nascimento = $_POST['dat_nasc'];
         $login      = $_POST['login'];
-        $grupo      = $_POST['grupo'];
+        $grupo      = $_POST['grupo_familiar'];
         $senha      = md5($senha);
 
-        
-        $us = $usuario->cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login );
-        
+        $chkUs = $usuario->chkUser($email);
+        if (!$chkUs){   
+            $us = $usuario->cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login );
+        }else{
+            echo "<script>
+                confirm('Erro ao conectar com o banco, tente mais tarde'
+            </script>";
+        }
+
         if(!$us){
             echo "<h1>Erro ao cadastrar usuário!</h1>";
+            
         }
     }
 

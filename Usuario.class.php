@@ -7,6 +7,25 @@ class Usuario{
     private $nivel_acesso;
     private $pdo;
 
+    public function __construct()
+    {
+        $dns = "mysql:dbname=famfinan;host=localhost";
+        $username = "root";
+        $password = "";
+
+        try {
+            $this->pdo = new PDO($dns, $username, $password);
+           
+            return true;
+        } catch (Exception $e) {
+            echo "Erro ao conectar ao banco de dados: ";
+            exit;
+            return false;
+        }
+
+    }
+
+
     public function getLogin()
     {
         return $this->login;
@@ -37,22 +56,6 @@ class Usuario{
         $this->login = $nivel_acesso;
     }
 
-    public function __construct()
-    {
-        $dns = "msql:dbname=famfinan;host=localhost";
-        $username = "root";
-        $password = "";
-
-        try {
-            $this->pdo = new PDO($dns, $username, $password);
-           
-            return true;
-        } catch (Exception $e) {
-            echo "Erro ao conectar ao banco de dados: ";
-            return false;
-        }
-
-    }
 
     public function cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login ){
         
@@ -62,18 +65,33 @@ class Usuario{
         $stmt->bindParam(':e', $email);
         $stmt->bindParam(':d', $nascimento);
         $stmt->bindParam(':g', $grupo);
-        $stmt->bindParam(':s', $senha);
+        $stmt->bindParam(':s', md5( $senha) );
         $stmt->bindParam(':l', $login);
         
         return $stmt->execute();
 
     }
 
-    public function chkUser($login, $senha){
+    public function chkUser($email){
+        $sql = "SELECT * FROM usuarios WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email', $email);
+    
+        $stmt->execute();
+
+        if($stmt->rowCount() > 0){
+            $result = $stmt->fetch();
+            return $result;
+        }else{
+            return array();
+        }
+    }
+
+    public function chkUserPass($login, $senha){
         $sql = "SELECT * FROM usuarios WHERE login = :login AND senha = :senha";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':login', $login);
-        $stmt->bindParam(':senha', $senha);
+        $stmt->bindParam(':senha', md5( $senha) );
         $stmt->execute();
 
         if($stmt->rowCount() > 0){
@@ -83,6 +101,40 @@ class Usuario{
         }else{
             return array();
         }
+    }
+
+    public function somaDespesasReceitas($email, $tipo){
+        $sql = "SELECT id FROM usuario WHERE email = :e";
+        $stmt = $this->pdo->prepare( $sql );
+        $stmt->bind_param(":e", $email);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            $user = $result_user->fetch_assoc();
+            $user_id = $user['id'];
+
+            // Despesas
+            if($tipo == "D"){
+                $sql = "SELECT SUM(valor) AS total_despesas FROM despesas WHERE id_usuario = :i";
+            }else{ 
+                $sql = "SELECT SUM(valor) AS total_receitas FROM despesas WHERE id_usuario = :i";
+            }
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bind_param(":i", $user_id);
+            $stmt->execute();
+            $total = 0;
+
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch_assoc();
+                if( $tipo == "D"){
+                    $total = $row['total_despesas'] ?: 0;
+                }else{
+                    $total = $row['total_receitas'] ?: 0;
+                }    
+                return $total;
+            }
+
+
     }
 
 }

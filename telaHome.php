@@ -1,54 +1,28 @@
 <?php
 session_start();
-include("config.php");
+include'Usuario.class.php';
 
-if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
     unset($_SESSION['login']);
     unset($_SESSION['senha']);
     header('Location: telalogin.php');
 }
-$logado = $_SESSION['login'];
 
-$sql_user = "SELECT id FROM usuario WHERE login = ?";
-$stmt_user = $pdo->prepare($sql_user);
-$stmt_user->bind_param("s", $logado);
-$stmt_user->execute();
-$result_user = $stmt_user->get_result();
-
-if ($result_user->num_rows > 0) {
-    $user = $result_user->fetch_assoc();
-    $user_id = $user['id'];
-
-    // Despesas
-    $sql_despesas = "SELECT SUM(valor) AS total_despesas FROM despesas WHERE id_usuario = ?";
-    $stmt_despesas = $pdo->prepare($sql_despesas);
-    $stmt_despesas->bind_param("i", $user_id);
-    $stmt_despesas->execute();
-    $result_despesas = $stmt_despesas->get_result();
-
-    $total_despesas = 0;
-    if ($result_despesas->num_rows > 0) {
-        $row = $result_despesas->fetch_assoc();
-        $total_despesas = $row['total_despesas'] ?: 0;
-    }
-
-    // Receitas
-    $sql_receitas = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = ?";
-    $stmt_receitas = $pdo->prepare($sql_receitas);
-    $stmt_receitas->bind_param("i", $user_id);
-    $stmt_receitas->execute();
-    $result_receitas = $stmt_receitas->get_result();
-
-    $total_receitas = 0;
-    if ($result_receitas->num_rows > 0) {
-        $row = $result_receitas->fetch_assoc();
-        $total_receitas = $row['total_receitas'] ?: 0;
-    }
+$logado = $_SESSION['email'];
+$con = $usuario = new Usuario();
+if(!con){
+    echo "<script>
+    confirm('Erro ao conectar ao banco de dados')
+</script>";
+}else{
+    $ckDespesas = $usuario->somaDespesasReceitas($email, "D");
+    $total_despesas = $shkUs;
+    $ckReceitas = $usuario->somaDespesasReceitas($email, "R");
+    $total_receitas = $shkUs;
 
     // Total Geral
     $total_saldo = $total_receitas - $total_despesas;
-
 } else {
     // Caso não encontre o usuário
     $total_despesas = 0;
@@ -109,7 +83,6 @@ if ($result_user->num_rows > 0) {
         </div>
         </div>
     </section>
-
 
 </body>
 

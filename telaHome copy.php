@@ -19,7 +19,7 @@ $result_user = $stmt_user->get_result();
 if ($result_user->num_rows > 0) {
     $user = $result_user->fetch_assoc();
     $user_id = $user['id'];
-//teste
+
     // Despesas
     $sql_despesas = "SELECT SUM(valor) AS total_despesas FROM despesas WHERE id_usuario = ?";
     $stmt_despesas = $pdo->prepare($sql_despesas);
@@ -34,7 +34,7 @@ if ($result_user->num_rows > 0) {
     }
 
     // Receitas
-    $sql_receitas = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = ?";
+   x
     $stmt_receitas = $pdo->prepare($sql_receitas);
     $stmt_receitas->bind_param("i", $user_id);
     $stmt_receitas->execute();
