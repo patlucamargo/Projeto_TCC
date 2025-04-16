@@ -1,25 +1,21 @@
 <?php
 session_start();
-include("config.php");
+include("Despesa.class.php");
+$despesa = new Despesa();
 
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
 
-  $id=$_SESSION['id_usuario'];
   unset($_SESSION['login']);
   unset($_SESSION['senha']);
   header('Location: telalogin.php');
 }
+
 $logado = $_SESSION['login'];
-
+$id=$_SESSION['id_usuario'];
 // Despesas Pendentes
-$sql_pendentes = "SELECT SUM(valor) AS total_pendentes FROM despesas WHERE pago = '0'";
-$result_pendentes = $pdo->query($sql_pendentes);
+ $total_pendentes = $despesa->despesaPendente($id);
 
-$total_pendentes = 0;
-if ($result_pendentes->num_rows > 0) {
-  $row = $result_pendentes->fetch_assoc();
-  $total_pendentes = $row['total_pendentes'] ?: 0;
-}
+
 
 // Despesas Recebidas
 $sql_recebidas = "SELECT SUM(valor) AS total_recebidas FROM despesas WHERE pago = '1'";
