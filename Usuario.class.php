@@ -104,13 +104,13 @@ class Usuario{
     }
 
     public function somaDespesasReceitas($email, $tipo){
-        $sql = "SELECT id FROM usuario WHERE email = :e";
+        $sql = "SELECT id FROM usuarios WHERE email = :e";
         $stmt = $this->pdo->prepare( $sql );
-        $stmt->bind_param(":e", $email);
+        $stmt->bindValue(":e", $email);
         $stmt->execute();
         
         if ($stmt->rowCount() > 0) {
-            $user = $result_user->fetch_assoc();
+            $user = $stmt->fetch();
             $user_id = $user['id'];
 
             // Despesas
@@ -120,12 +120,12 @@ class Usuario{
                 $sql = "SELECT SUM(valor) AS total_receitas FROM despesas WHERE id_usuario = :i";
             }
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bind_param(":i", $user_id);
+            $stmt->bindValue(":i", $user_id);
             $stmt->execute();
             $total = 0;
 
             if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch_assoc();
+                $row = $stmt->fetch();
                 if( $tipo == "D"){
                     $total = $row['total_despesas'] ?: 0;
                 }else{
@@ -133,8 +133,7 @@ class Usuario{
                 }    
                 return $total;
             }
-
-
+        }    
     }
 
 }

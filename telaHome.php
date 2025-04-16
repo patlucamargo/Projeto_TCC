@@ -4,30 +4,27 @@ include'Usuario.class.php';
 
 if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
-    unset($_SESSION['login']);
+    unset($_SESSION['email']);
     unset($_SESSION['senha']);
     header('Location: telalogin.php');
 }
 
-$logado = $_SESSION['email'];
+$logado = $_SESSION['login'];
+$email  = $_SESSION['email'];
+
 $con = $usuario = new Usuario();
-if(!con){
+if(!$con){
     echo "<script>
-    confirm('Erro ao conectar ao banco de dados')
-</script>";
+            confirm('Erro ao conectar ao banco de dados')
+        </script>";
 }else{
     $ckDespesas = $usuario->somaDespesasReceitas($email, "D");
-    $total_despesas = $shkUs;
+    $total_despesas = $ckDespesas;
     $ckReceitas = $usuario->somaDespesasReceitas($email, "R");
-    $total_receitas = $shkUs;
+    $total_receitas = $ckDespesas;
 
     // Total Geral
     $total_saldo = $total_receitas - $total_despesas;
-} else {
-    // Caso não encontre o usuário
-    $total_despesas = 0;
-    $total_receitas = 0;
-    $total_saldo = 0;
 }
 
 ?>

@@ -29,8 +29,7 @@ if (isset($_POST['enviar'])) {
         }
 
         if(!$us){
-            echo "<h1>Erro ao cadastrar usuário!</h1>";
-            
+            echo "<h1>Erro ao cadastrar usuário!</h1>";            
         }
     }
 
