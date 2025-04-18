@@ -1,30 +1,35 @@
 <?php
 session_start();
-require 'Receita.class.php';
-$con = $receita = new Receita();
+include("config.php");
 
-if(!$con){
-  echo "Erro ao conectar ao banco de dados";
-  exit;
-}else{
-  if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
 
-    unset($_SESSION['login']);
-    unset($_SESSION['senha']);
-    header('Location: telalogin.php');
-  }
-  $logado = $_SESSION['login'];
-  $id     = $_SESSION['id'];
-
-  // Receitas Pendentes
-  $total_pendente = $receita->receitasPendentes($id);
-
-  // Receitas Recebidas
-  $total_recebidas = $receita->receitasRecebidas($id);
-
-  // Total Geral
-  $total_geral = $total_pendente + $total_recebidas;
+  unset($_SESSION['login']);
+  unset($_SESSION['senha']);
+  header('Location: telalogin.php');
 }
+$logado = $_SESSION['login'];
+
+// Receitas Pendentes
+$receita->$id, $categoria, $descricao, $valor, $dataRegistro, $numParcelas, $pago
+$total_pendentes = 0;
+if ($result_pendentes->num_rows > 0) {
+  $row = $result_pendentes->fetch_assoc();
+  $total_pendentes = $row['total_pendentes'] ?: 0;
+}
+
+// Receitas Recebidas
+$sql_recebidas = "SELECT SUM(valor) AS total_recebidas FROM receitas WHERE pago = '1'";
+$result_recebidas = $pdo->query($sql_recebidas);
+
+$total_recebidas = 0;
+if ($result_recebidas->num_rows > 0) {
+  $row = $result_recebidas->fetch_assoc();
+  $total_recebidas = $row['total_recebidas'] ?: 0;
+}
+
+// Total Geral
+$total_geral = $total_pendentes + $total_recebidas;
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +70,7 @@ if(!$con){
       <section class="summary">
         <div class="card">
           <h2>Receitas pendentes</h2>
-          <p>R$ <?php echo number_format($total_pendente, 2, ',', '.'); ?></p>
+          <p>R$ <?php echo number_format($total_pendentes, 2, ',', '.'); ?></p>
         </div>
         <div class="card">
           <h2>Receitas recebidas</h2>
@@ -96,9 +101,11 @@ if(!$con){
           </thead>
           <tbody>
             <?php
-            foreach ($receita as $key => $linha) {
-              # code...
-           
+            $consulta = "SELECT * FROM receitas";
+            $resultado = $pdo->query($consulta);
+
+            while ($linha = mysqli_fetch_assoc($resultado)) {
+
               $status_pago = $linha['pago']; // Exemplo
             
               // Renderizando o ícone
@@ -108,24 +115,23 @@ if(!$con){
             
               echo "<tr>";
               echo "<td>" . $icone_status . "</td>";
-              echo "<td>" . $linha["dataRegistro"] . "</td>";
+              echo "<td>" . $linha["data_registro"] . "</td>";
               echo "<td>" . $linha["categoria"] . "</td>";
               echo "<td>" . $linha["valor"] . "</td>";
               echo "<td> <a href='#' class='edit-btn' 
-                          data-id='{$linha["id_usuario"]}' 
+                          data-id='{$linha["id"]}' 
                           data-valor='{$linha["valor"]}' 
                           data-categoria='{$linha["categoria"]}' 
-                          data-data_registro='{$linha["dataRegistro"]}' 
+                          data-data_registro='{$linha["data_registro"]}' 
                           data-numParcelas='{$linha["numParcelas"]}' 
                           data-pago='{$linha["pago"]}'>
                           <img src='imagem/lapis1.jpg' alt='Alterar'></a> 
                           &nbsp;&nbsp;
-                          <a href='deletReceita.php?id=$linha[id_usuario]'><img src='imagem/excluir1.jpg' alt='Deletar'></a>
+                          <a href='deletReceita.php?id=$linha[id]'><img src='imagem/excluir1.jpg' alt='Deletar'></a>
                     </td>";;
 
               echo "</tr>";
-            
-          }
+            }
             ?>
 
           </tbody>
@@ -164,7 +170,7 @@ if(!$con){
           <div class="form-row">
             <div class="form-column">
               <label for="data_registro"><b>Data de Registro</b></label>
-              <input type="date" name="dataRegistro" id="dataRegistro" required>
+              <input type="date" name="data_registro" id="data_registro" required>
             </div>
             <div class="form-column">
               <label for="numParcelas">Número de Parcelas</label>
@@ -199,7 +205,7 @@ if(!$con){
       </header>
 
       <!-- Campo oculto para armazenar o ID da receita -->
-      <input type="hidden" name="id_usuario" id="update-id_usuario">
+      <input type="hidden" name="id" id="update-id">
 
       <!-- Valor -->
       <div class="form-group">
@@ -221,7 +227,7 @@ if(!$con){
         <div class="form-row">
           <div class="form-column">
             <label for="update-data_registro">Data de Registro</label>
-            <input type="date" name="dataRegistro" id="update-dataRegistro" required>
+            <input type="date" name="data_registro" id="update-data_registro" required>
           </div>
           <div class="form-column">
             <label for="update-numParcelas">Número de Parcelas</label>
@@ -273,18 +279,18 @@ document.querySelectorAll(".edit-btn").forEach(button => {
     event.preventDefault(); // Evita a navegação padrão
 
     // Pegando os dados do botão clicado
-    const id = this.getAttribute("data-id_usuario");
+    const id = this.getAttribute("data-id");
     const valor = this.getAttribute("data-valor");
     const categoria = this.getAttribute("data-categoria");
-    const data_registro = this.getAttribute("data-dataRegistro");
+    const data_registro = this.getAttribute("data-data_registro");
     const numParcelas = this.getAttribute("data-numParcelas");
     const pago = this.getAttribute("data-pago") === "1"; // Converte string para booleano
 
     // Preenchendo os campos do formulário
-    document.getElementById("update-id_usuario").value = id;
+    document.getElementById("update-id").value = id;
     document.getElementById("update-valor").value = valor;
     document.getElementById("update-categoria").value = categoria;
-    document.getElementById("update-dataRegistro").value = data_registro;
+    document.getElementById("update-data_registro").value = data_registro;
     document.getElementById("update-numParcelas").value = numParcelas;
     document.getElementById("update-pago").checked = pago;
 

@@ -21,8 +21,7 @@ if(!$desp){
                 $valor = $_POST['valor'];
                 $dataVenc = $_POST['dataVenc'];
                 $pago = isset($_POST['pago']) ? 1 : 0;
-
-                $id = $_SESSION['id_usuario'];
+                $id = $_SESSION['id'];
                 $despesa->inserirDespesa($id, $categoria, $descricao, $valor, $dataVenc, $pago);
       
         }

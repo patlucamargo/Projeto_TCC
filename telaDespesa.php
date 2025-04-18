@@ -11,25 +11,20 @@ if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true
 }
 
 $logado = $_SESSION['login'];
-$id=$_SESSION['id_usuario'];
+$id=$_SESSION['id'];
+
 // Despesas Pendentes
- $total_pendentes = $despesa->despesaPendente($id);
-
-
+ $total_pendentes = $despesa->despesasPendentes($id);
 
 // Despesas Recebidas
-$sql_recebidas = "SELECT SUM(valor) AS total_recebidas FROM despesas WHERE pago = '1'";
-$result_recebidas = $pdo->query($sql_recebidas);
 
-$total_recebidas = 0;
-if ($result_recebidas->num_rows > 0) {
-  $row = $result_recebidas->fetch_assoc();
-  $total_recebidas = $row['total_recebidas'] ?: 0;
-}
 
-// Total Geral
-$total_geral = $total_pendentes + $total_recebidas;
-?>
+ $total_recebidas = $despesa->despesasRecebidas($id);
+
+
+ // Total Geral
+ $total_geral = $total_pendentes + $total_recebidas;
+// ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -67,7 +62,7 @@ $total_geral = $total_pendentes + $total_recebidas;
       </header>
 
       <!-- Resumo -->
-      <section class="summary">
+      <!-- <section class="summary">
         <div class="card">
           <h2>Despesas pendentes</h2>
           <p>R$ <?php echo number_format($total_pendentes, 2, ',', '.'); ?></p>
@@ -80,7 +75,7 @@ $total_geral = $total_pendentes + $total_recebidas;
           <h2>Total</h2>
           <p>R$ <?php echo number_format($total_geral, 2, ',', '.'); ?></p>
         </div>
-      </section>
+      </section> -->
 
       <!-- Tabela de despesas com navegação -->
       <section class="despesas">
@@ -102,11 +97,9 @@ $total_geral = $total_pendentes + $total_recebidas;
           </thead>
           <tbody>
             <?php
-            $consulta = "SELECT * FROM despesas";
-            $resultado = $pdo->query($consulta);
-
-            while ($linha = mysqli_fetch_assoc($resultado)) {
-
+            foreach ($despesa as $key => $linha) {
+              # code...
+           
               $status_pago = $linha['pago']; // Exemplo
             
               // Renderizando o ícone

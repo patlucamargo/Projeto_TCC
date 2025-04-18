@@ -11,6 +11,7 @@ if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
 $logado = $_SESSION['login'];
 $email  = $_SESSION['email'];
+$id     = $_SESSION['id'];
 
 $con = $usuario = new Usuario();
 if(!$con){
