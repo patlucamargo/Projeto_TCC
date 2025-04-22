@@ -87,7 +87,7 @@ class Receita{
 
         $inserir -> bindValue(":ca", $categoria);
         $inserir -> bindValue(":vl", $valor);
-        $inserir -> bindValue(":dv", $dataRegistro);
+        $inserir -> bindValue(":dr", $dataRegistro);
         $inserir -> bindValue(":pg", $pago);
         $inserir -> bindValue(":np", $numParcelas);
         $inserir -> bindValue(":id", $id);
@@ -99,14 +99,11 @@ class Receita{
         $sql = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = :id AND pago = '1'";
         $sql = $this->pdo->prepare($sql);
         $sql ->bindValue(":id", $id);
+        $sql->execute();
 
-        if( $sql->rowCount() > 0 ){
-            $receita = $sql->fetch();
-            return $receita['total_receitas'];
-        }else{
-            return 0;
-        }
-
+        $receita = $sql->fetch();
+       
+        return $receita['total_receitas'] ?? 0;
     }
 
     public function receitasRecebidas($id){
@@ -114,18 +111,18 @@ class Receita{
         $sql = $this->pdo->prepare($sql);
         $sql ->bindValue(":id", $id);
 
-        if( $sql->rowCount() > 0 ){
-            $recebidos = $sql->fetch();
-            return $recebidos['total_recebidos'];
-        }else{
-            return 0;
-        }
+        $sql->execute();
+
+        $recebidos = $sql->fetch();
+        return $recebidos['total_recebidos'] ?? 0;
+        
 
     }
 
     public function receitas(){
         $consulta = "SELECT * FROM receitas";
         $resultado = $this->pdo->query($consulta);
+        $resultado->execute();
         return $resultado->fetchAll();
     }
 
