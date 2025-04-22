@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "Despesa.class.php";
+require "classes\Despesa.class.php";
 
 $desp = $despesa = new Despesa();
 

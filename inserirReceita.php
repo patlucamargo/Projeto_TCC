@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "Receita.class.php";
+include "classes\Receita.class.php";
 $rec = $receita = new Receita();
 
 if(!$rec){

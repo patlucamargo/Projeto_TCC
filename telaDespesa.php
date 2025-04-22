@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("Despesa.class.php");
+include("classes\Despesa.class.php");
 $despesa = new Despesa();
 
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {

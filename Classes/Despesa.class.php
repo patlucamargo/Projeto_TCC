@@ -102,12 +102,11 @@ class Despesa
         $sql = $this->pdo->prepare($sql);
         $sql ->bindValue(":id", $id);
 
-        if( $sql->rowCount() > 0 ){
-            $pendente = $sql->fetch();
-            return $pendente['total_pendentes'];
-        }else{
-            return 0;
-        }
+        $sql->execute();
+
+        $despesa = $sql->fetch();
+       
+        return $despesa['total_receitas'] ?? 0;
 
     }
 
@@ -115,13 +114,11 @@ class Despesa
         $sql = "SELECT SUM(valor) AS total_recebidos FROM despesas WHERE id_usuario = :id AND pago = '1' ";
         $sql = $this->pdo->prepare($sql);
         $sql ->bindValue(":id", $id);
+        $sql->execute();
 
-        if( $sql->rowCount() > 0 ){
-            $recebidos = $sql->fetch();
-            return $recebidos['total_recebidos'];
-        }else{
-            return 0;
-        }
+        $recebidos = $sql->fetch();
+        return $recebidos['total_recebidos'] ?? 0;
+        
 
     }
 

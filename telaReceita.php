@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'Receita.class.php';
+require 'classes\Receita.class.php';
 $con = $receita = new Receita();
 
 if(!$con){
