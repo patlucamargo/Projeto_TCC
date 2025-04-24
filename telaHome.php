@@ -1,6 +1,6 @@
 <?php
 session_start();
-include'Usuario.class.php';
+include'Classes/Usuario.class.php';
 
 if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
