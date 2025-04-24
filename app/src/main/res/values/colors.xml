@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="azulP">#1d3c6a</color>
+    <color name="verdeP">#2c6d2f </color>
+    <color name="cinzaP">#b0b0b0 </color>
+    <color name="vermelhoP">#f60303 </color>
+    <color name="azul1">#2a527e </color>
+    <color name="azul2">#3d6a94 </color>
+    <color name="azul3">#55799d </color>
+    <color name="azul4">#7791b0 </color>
+    <color name="azul5">#a5b8d2 </color>
+    <color name="verde1">#3c8f45 </color>
+    <color name="verde2">#4daf5a </color>
+    <color name="verde3">#6ebf74 </color>
+    <color name="verde4">#8edc8a </color>
+    <color name="verde5">#a9eba1 </color>
+    <color name="cinza1">#c0c0c0 </color>
+    <color name="cinza2">#d0d0d0 </color>
+    <color name="cinza3">#e0e0e0 </color>
+    <color name="cinza4">#f0f0f0 </color>
+    <color name="cinza5">#f5f5f5 </color>
+    <color name="vermelho1">#ff4d4d </color>
+    <color name="vermelho2">#ff6666 </color>
+    <color name="vermelho3">#ff8080 </color>
+    <color name="vermelho4">#ff9999 </color>
+    <color name="vermelho5">#ffb3b3 </color>
+    <color name="fundo_naveBAR"> #7606fe </color>
+    <color name="fundo_naveBAR_claro"> #6e04f0 </color>
+    <color name="Hove_no_botao"> #983aba </color>
+    <color name="fundoLogo"> #ccd9e0 </color>
+</resources>
