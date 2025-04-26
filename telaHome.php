@@ -1,7 +1,9 @@
 <?php
 session_start();
+
 include 'Classes/Receita.class.php';
 include 'Classes/Despesa.class.php';
+
 
 if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
