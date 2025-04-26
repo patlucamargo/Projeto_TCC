@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'classes\Receita.class.php';
+require 'Classes\Receita.class.php';
 $con = $receita = new Receita();
 
 if(!$con){
@@ -43,7 +43,7 @@ if(!$con){
     <!-- Navbar -->
     <nav class="navbar">
       <div class="navbar-left">
-        <img src="imagem/logo_Family_Financing.png" alt="Ícone" class="navbar-icon">
+        <img src="imagem/logo_Fam_Finan.png" alt="Ícone" class="navbar-icon">
         <span class="project-name">Family Financing</span>
       </div>
       <div class="navbar-right">
@@ -95,31 +95,37 @@ if(!$con){
           </thead>
           <tbody>
             <?php
-            foreach ($receita as $key => $linha) {
+                      
+            $receitas = $receita->receitas($id);
+            foreach ($receitas as $key => $linha) {
               # code...
            
               $status_pago = $linha['pago']; // Exemplo
-            
-              // Renderizando o ícone
-              $icone_status = $status_pago == '1'
+              $icone_status = $status_pago == '1' // Renderizando o ícone
                 ? '<span style="color: green;">&#x2705;</span>' // Bolinha com verificado
                 : '<span style="color: gray;">&#x26AA;</span>';  // Bolinha vazia
+
+                // Pega o ano e mês da receita
+              $data = new DateTime($linha["data_registro"]);
+              $ano = $data->format('Y');
+              $mes = $data->format('m');
             
-              echo "<tr>";
+              echo "<tr data-ano='{$ano}' data-mes='{$mes}'>";
               echo "<td>" . $icone_status . "</td>";
-              echo "<td>" . $linha["dataRegistro"] . "</td>";
+              echo "<td>" . $linha["data_registro"] . "</td>";
               echo "<td>" . $linha["categoria"] . "</td>";
               echo "<td>" . $linha["valor"] . "</td>";
               echo "<td> <a href='#' class='edit-btn' 
-                          data-id='{$linha["id_usuario"]}' 
+                          data-id='{$linha["id"]}'
+                          data-id_usuario='{$linha["id_usuario"]}' 
                           data-valor='{$linha["valor"]}' 
                           data-categoria='{$linha["categoria"]}' 
-                          data-data_registro='{$linha["dataRegistro"]}' 
+                          data-data_registro='{$linha["data_registro"]}' 
                           data-numParcelas='{$linha["numParcelas"]}' 
                           data-pago='{$linha["pago"]}'>
                           <img src='imagem/lapis1.jpg' alt='Alterar'></a> 
                           &nbsp;&nbsp;
-                          <a href='deletReceita.php?id=$linha[id_usuario]'><img src='imagem/excluir1.jpg' alt='Deletar'></a>
+                          <a href='deletReceita.php?id=$linha[id]'><img src='imagem/excluir1.jpg' alt='Deletar'></a>
                     </td>";;
 
               echo "</tr>";
@@ -163,7 +169,7 @@ if(!$con){
           <div class="form-row">
             <div class="form-column">
               <label for="data_registro"><b>Data de Registro</b></label>
-              <input type="date" name="dataRegistro" id="dataRegistro" required>
+              <input type="date" name="data_registro" id="data_registro" required>
             </div>
             <div class="form-column">
               <label for="numParcelas">Número de Parcelas</label>
@@ -199,6 +205,7 @@ if(!$con){
 
       <!-- Campo oculto para armazenar o ID da receita -->
       <input type="hidden" name="id_usuario" id="update-id_usuario">
+      <input type="hidden" name="id" id="update-id">
 
       <!-- Valor -->
       <div class="form-group">
@@ -220,7 +227,7 @@ if(!$con){
         <div class="form-row">
           <div class="form-column">
             <label for="update-data_registro">Data de Registro</label>
-            <input type="date" name="dataRegistro" id="update-dataRegistro" required>
+            <input type="date" name="data_registro" id="update-data_registro" required>
           </div>
           <div class="form-column">
             <label for="update-numParcelas">Número de Parcelas</label>
@@ -272,18 +279,20 @@ document.querySelectorAll(".edit-btn").forEach(button => {
     event.preventDefault(); // Evita a navegação padrão
 
     // Pegando os dados do botão clicado
-    const id = this.getAttribute("data-id_usuario");
+    const id_usuario = this.getAttribute("data-id_usuario");
+    const id = this.getAttribute("data-id");
     const valor = this.getAttribute("data-valor");
     const categoria = this.getAttribute("data-categoria");
-    const data_registro = this.getAttribute("data-dataRegistro");
+    const data_registro = this.getAttribute("data-data_registro");
     const numParcelas = this.getAttribute("data-numParcelas");
     const pago = this.getAttribute("data-pago") === "1"; // Converte string para booleano
 
     // Preenchendo os campos do formulário
-    document.getElementById("update-id_usuario").value = id;
+    document.getElementById("update-id_usuario").value = id_usuario;
+    document.getElementById("update-id").value = id;
     document.getElementById("update-valor").value = valor;
     document.getElementById("update-categoria").value = categoria;
-    document.getElementById("update-dataRegistro").value = data_registro;
+    document.getElementById("update-data_registro").value = data_registro;
     document.getElementById("update-numParcelas").value = numParcelas;
     document.getElementById("update-pago").checked = pago;
 
@@ -300,6 +309,56 @@ document.getElementById("close-update-btn").addEventListener("click", function (
 document.getElementById("cancel-update-btn").addEventListener("click", function () {
   document.getElementById("update-form-container").style.display = "none";
 });
+
+//Controlando as receitas por mes
+document.addEventListener("DOMContentLoaded", function () {
+  let hoje = new Date();
+  let mesAtual = hoje.getMonth(); // 0 = Janeiro, 1 = Fevereiro, etc
+  let anoAtual = hoje.getFullYear();
+
+  const nomeMes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+  function atualizarTabela() {
+    const linhas = document.querySelectorAll("tbody tr");
+
+    linhas.forEach(linha => {
+      const anoLinha = parseInt(linha.getAttribute("data-ano"));
+      const mesLinha = parseInt(linha.getAttribute("data-mes")) - 1; // porque JavaScript começa o mês em 0
+
+      if (anoLinha === anoAtual && mesLinha === mesAtual) {
+        linha.style.display = ""; // Mostra
+      } else {
+        linha.style.display = "none"; // Esconde
+      }
+    });
+
+    // Atualiza o título acima da tabela
+    document.getElementById("mes-ano").textContent = `${nomeMes[mesAtual]} ${anoAtual}`;
+  }
+
+  document.getElementById("mes-anterior").addEventListener("click", function () {
+    mesAtual--;
+    if (mesAtual < 0) {
+      mesAtual = 11;
+      anoAtual--;
+    }
+    atualizarTabela();
+  });
+
+  document.getElementById("mes-proximo").addEventListener("click", function () {
+    mesAtual++;
+    if (mesAtual > 11) {
+      mesAtual = 0;
+      anoAtual++;
+    }
+    atualizarTabela();
+  });
+
+  // Primeira atualização ao carregar
+  atualizarTabela();
+});
+
   </script>
 </body>
 

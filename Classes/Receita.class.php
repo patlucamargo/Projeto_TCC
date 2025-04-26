@@ -74,20 +74,24 @@ class Receita{
     }   
 
     public function somaReceitas($id_usuario){
-        $sql = "SELECT SUM(valor) FROM receitas WHERE id_usuario = :id_usuario";
+        $sql = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = :id_usuario";
         $inserir = $this->pdo->prepare($sql);
         $inserir->bindParam(':id_usuario', $id_usuario);
-        return $inserir->execute();
+        $inserir->execute();
+
+        $receita = $inserir->fetch();
+       
+        return $receita['total_receitas'] ?? 0;
     }
     
-    public function inserirReceita($id, $categoria, $valor, $dataRegistro, $numParcelas, $pago){
+    public function inserirReceita($id, $categoria, $valor, $data_registro, $numParcelas, $pago){
         $sql = "INSERT INTO receitas set categoria = :ca, valor = :vl, data_registro = :dr, numParcelas = :np, pago  = :pg, id_usuario = :id";
 
         $inserir = $this->pdo->prepare($sql);
 
         $inserir -> bindValue(":ca", $categoria);
         $inserir -> bindValue(":vl", $valor);
-        $inserir -> bindValue(":dr", $dataRegistro);
+        $inserir -> bindValue(":dr", $data_registro);
         $inserir -> bindValue(":pg", $pago);
         $inserir -> bindValue(":np", $numParcelas);
         $inserir -> bindValue(":id", $id);
@@ -95,8 +99,23 @@ class Receita{
         return $inserir->execute();
     }
 
+    public function alterarReceita($id, $categoria, $valor, $data_registro, $numParcelas, $pago){
+        $sql = "UPDATE receitas set categoria = :ca, valor = :vl, data_registro = :dr, numParcelas = :np, pago  = :pg WHERE id = :id";
+
+        $alterar = $this->pdo->prepare($sql);
+
+        $alterar -> bindValue(":ca", $categoria);
+        $alterar -> bindValue(":vl", $valor);
+        $alterar -> bindValue(":dr", $data_registro);
+        $alterar -> bindValue(":pg", $pago);
+        $alterar -> bindValue(":np", $numParcelas);
+        $alterar -> bindValue(":id", $id);
+
+        return $alterar->execute();
+    }
+
     public function receitasPendentes($id){
-        $sql = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = :id AND pago = '1'";
+        $sql = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = :id AND pago = '0'";
         $sql = $this->pdo->prepare($sql);
         $sql ->bindValue(":id", $id);
         $sql->execute();
@@ -119,11 +138,33 @@ class Receita{
 
     }
 
-    public function receitas(){
-        $consulta = "SELECT * FROM receitas";
-        $resultado = $this->pdo->query($consulta);
+    public function receitas($id){
+        $consulta = "SELECT * FROM receitas WHERE id_usuario = :id";
+        $resultado = $this->pdo->prepare($consulta);
+        $resultado ->bindValue(":id", $id);
+
         $resultado->execute();
         return $resultado->fetchAll();
     }
+
+    public function deletreceitas($id){
+        $consulta = "DELETE FROM receitas WHERE id = :id";
+        $resultado = $this->pdo->prepare($consulta);
+        $resultado ->bindValue(":id", $id);
+
+        $resultado->execute();
+        return $resultado->fetchAll();
+    }
+
+    public function receitasPorMes($id, $mes, $ano) {
+        $consulta = "SELECT * FROM receitas WHERE id_usuario = :id AND MONTH(STR_TO_DATE(data_registro, '%Y-%m-%d')) = :mes AND YEAR(STR_TO_DATE(data_registro, '%Y-%m-%d')) = :ano";
+        $stmt = $this->pdo->prepare($consulta);
+        $stmt->bindValue(":id", $id);
+        $stmt->bindValue(":mes", $mes);
+        $stmt->bindValue(":ano", $ano);
+        $stmt->execute();
+        return $stmt->fetchAll();
+      }
+
 
 }

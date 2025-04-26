@@ -1,25 +1,35 @@
 <?php
+session_start();
+include "Classes\Receita.class.php";
+$rec = $receita = new Receita();
 
-    include_once('config.php');
+if (!$rec) {
+    echo "Erro ao conectar ao banco de dados";
+    exit;
+} else {
+    if ((!isset($_SESSION['login'])) && (!isset($_SESSION['senha']))) {
+        unset($_SESSION['login']);
+        unset($_SESSION['senha']);
+        header('Location: telalogin.php');
 
-    if(isset($_POST['submit'])){
-    
-    $id = $_POST['id'];
-    $valor = $_POST['valor'];
-    $categoria = $_POST['categoria'];
-    $dt = $_POST['data_registro']; 
-    $numero_parcelas = $_POST['numParcelas'] ?: 1; 
-    $pago = isset($_POST['pago']) ? 1 : 0;
+    } else {
 
-    $sqlUpdate = "UPDATE receitas SET valor='$valor', categoria='$categoria', data_registro='$dt', numParcelas='$numero_parcelas', pago='$pago'
-    WHERE id='$id'";
+        if (isset($_POST['submit'])) {
 
-    $result = $pdo->query($sqlUpdate);
-    print_r($result);
+            $id = $_POST['id'];
+            $valor = $_POST['valor'];
+            $categoria = $_POST['categoria'];
+            $data_registro = $_POST['data_registro'];
+            $numero_parcelas = $_POST['numParcelas'] ?: 1;
+            $pago = isset($_POST['pago']) ? 1 : 0;
 
+            $receita->alterarReceita($id, $categoria, $valor, $data_registro, $numParcelas, $pago);
 
+        } else {
+            echo "Erro ao conectar ao banco de dados";
 
+        }
     }
-
-    header ('Location: telaReceita.php');
+}
+header('Location: telaReceita.php');
 ?>

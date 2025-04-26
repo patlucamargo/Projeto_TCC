@@ -7,7 +7,7 @@ if (isset($_POST['submit']) && !empty($_POST['email'] && !empty($_POST['senha'])
     $senha = md5( $_POST['senha']);
 
     
-    include_once('classes\Usuario.class.php');
+    include_once('Classes\Usuario.class.php');
    
     $conecta = $usuario = new Usuario();
     

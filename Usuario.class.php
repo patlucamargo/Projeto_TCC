@@ -3,6 +3,7 @@
 class Usuario{
     private $id;
     private $login;
+    private $email;
     private $senha;
     private $nivel_acesso;
     private $pdo;
@@ -20,7 +21,6 @@ class Usuario{
         } catch (Exception $e) {
             echo "Erro ao conectar ao banco de dados: ";
             exit;
-            return false;
         }
 
     }
@@ -34,6 +34,16 @@ class Usuario{
     public function setLogin($login)
     {
         $this->login = $login;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
     }
 
     public function getSenha()
@@ -53,7 +63,7 @@ class Usuario{
 
     public function setNivel_acesso($nivel_acesso)
     {
-        $this->login = $nivel_acesso;
+        $this->nivel_acesso = $nivel_acesso;
     }
 
 
@@ -87,11 +97,11 @@ class Usuario{
         }
     }
 
-    public function chkUserPass($login, $senha){
-        $sql = "SELECT * FROM usuarios WHERE login = :login AND senha = :senha";
+    public function chkUserPass($email, $senha){
+        $sql = "SELECT * FROM usuarios WHERE email = :email AND senha = :senha";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':login', $login);
-        $stmt->bindParam(':senha', md5( $senha) );
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':senha', $senha);
         $stmt->execute();
 
         if($stmt->rowCount() > 0){
@@ -103,5 +113,39 @@ class Usuario{
         }
     }
 
+    public function somaDespesasReceitas($email, $tipo){
+        $sql = "SELECT id FROM usuarios WHERE email = :e";
+        $stmt = $this->pdo->prepare( $sql );
+        $stmt->bindParam(":e", $email);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            $user = $result_user->fetch_assoc();
+            $user_id = $user['id'];
 
+            // Despesas
+            if($tipo == "D"){
+                $sql = "SELECT SUM(valor) AS total_despesas FROM despesas WHERE id_usuario = :i";
+            }else{ 
+                $sql = "SELECT SUM(valor) AS total_receitas FROM despesas WHERE id_usuario = :i";
+            }
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(":i", $user_id);
+            $stmt->execute();
+            $total = 0;
+
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch_assoc();
+                if( $tipo == "D"){
+                    $total = $row['total_despesas'] ?: 0;
+                }else{
+                    $total = $row['total_receitas'] ?: 0;
+                }    
+                return $total;
+            }
+
+
+    }
+
+}
 }

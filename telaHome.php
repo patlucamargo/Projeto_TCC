@@ -1,32 +1,40 @@
 <?php
 session_start();
-include'Usuario.class.php';
+include 'Classes/Receita.class.php';
+include 'Classes/Despesa.class.php';
 
 if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 
     unset($_SESSION['email']);
     unset($_SESSION['senha']);
-    header('Location: telalogin.php');
+    header('Location: telalogin&cadastro.php');
 }
 
 $logado = $_SESSION['login'];
 $email  = $_SESSION['email'];
 $id     = $_SESSION['id'];
 
-$con = $usuario = new Usuario();
+$con = $receita = new Receita();
 if(!$con){
     echo "<script>
             confirm('Erro ao conectar ao banco de dados')
         </script>";
 }else{
-    $ckDespesas = $usuario->somaDespesasReceitas($email, "D");
-    $total_despesas = $ckDespesas;
-    $ckReceitas = $usuario->somaDespesasReceitas($email, "R");
-    $total_receitas = $ckDespesas;
+    $total_receitas = $receita->somaReceitas($id);
+}
+
+$con = $despesa = new Despesa();
+if(!$con){
+    echo "<script>
+            confirm('Erro ao conectar ao banco de dados')
+        </script>";
+}else{
+    $total_despesas = $despesa->despesasPendentes($id);
+}
 
     // Total Geral
     $total_saldo = $total_receitas - $total_despesas;
-}
+
 
 ?>
 
@@ -43,12 +51,12 @@ if(!$con){
 
 <body>
     <header>
-
+   
         <div class="container">
             <!-- Navbar -->
             <nav class="navbar">
                 <div class="navbar-left">
-                    <img src="imagem/logo_Family_Financing.png" alt="Ícone" class="navbar-icon">
+                    <img src="imagem/logo_Fam_Finan.png" alt="Ícone" class="navbar-icon">
                     <span class="project-name">Family Financing</span>
                 </div>
                 <div class="navbar-right">

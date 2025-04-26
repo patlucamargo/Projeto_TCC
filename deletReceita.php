@@ -1,21 +1,15 @@
 <?php
+session_start();
 
 if (!empty($_GET['id'])) {
-    
-    include_once('config.php');
+
+    include "Classes\Receita.class.php";
+    $rec = $receita = new Receita();
 
     $id = $_GET['id'];
 
-    $sqlSelect = "SELECT * FROM receitas WHERE id=$id";
+    $receita->deletreceitas($id);
 
-    $result = $pdo->query($sqlSelect);
-
-    if($result->num_rows > 0){
-       
-        $sqlDelete = "DELETE FROM receitas where id=$id";
-        $resultDelete = $pdo->query($sqlDelete);    
-        
-    }      
 }
 
 header('Location: telaReceita.php');

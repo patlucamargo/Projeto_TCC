@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("classes\Despesa.class.php");
+include("Classes\Despesa.class.php");
 $despesa = new Despesa();
 
 if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
@@ -44,7 +44,7 @@ $id=$_SESSION['id'];
     <!-- Navbar -->
     <nav class="navbar">
       <div class="navbar-left">
-        <img src="imagem/logo_Family_Financing.png" alt="Ícone" class="navbar-icon">
+        <img src="imagem/logo_Fam_Finan.png" alt="Ícone" class="navbar-icon">
         <span class="project-name">Family Financing</span>
       </div>
       <div class="navbar-right">
