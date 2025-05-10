@@ -4,6 +4,7 @@ class Usuario{
     private $id;
     private $login;
     private $senha;
+    private $grupo_familiar;
     private $nivel_acesso;
     private $pdo;
 
@@ -26,45 +27,46 @@ class Usuario{
     }
 
 
-    public function getLogin()
-    {
+    public function getLogin(){
         return $this->login;
     }
 
-    public function setLogin($login)
-    {
+    public function setLogin($login){
         $this->login = $login;
     }
 
-    public function getSenha()
-    {
+    public function getSenha(){
         return $this->senha;
     }
 
-    public function setSenha($senha)
-    {
+    public function setSenha($senha){
         $this->senha = $senha;
     }
 
-    public function getNivel_acesso()
-    {
+    public function getGrupo_familiar(){
+        return $this->grupo_familiar;
+    }
+
+    public function setGrupo_familiar($grupo_familiar){
+        $this->grupo_familiar = $grupo_familiar;
+    }
+
+    public function getNivel_acesso(){
         return $this->nivel_acesso;
     }
 
-    public function setNivel_acesso($nivel_acesso)
-    {
+    public function setNivel_acesso($nivel_acesso){
         $this->login = $nivel_acesso;
     }
 
 
-    public function cadastrarUsuario( $nome, $email, $nascimento, $grupo,  $senha, $login ){
+    public function cadastrarUsuario( $nome, $email, $grupo_familiar,  $senha, $login ){
         
-        $sql = "INSERT INTO usuarios SET nome_completo=:n, email=:e, dat_nasc=:d, grupo_familiar = :g, senha = :s, login= :l ";
+        $sql = "INSERT INTO usuarios SET nome_completo=:n, email=:e, grupo_familiar = :g, senha = :s, login= :l ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':n', $nome);
         $stmt->bindParam(':e', $email);
-        $stmt->bindParam(':d', $nascimento);
-        $stmt->bindParam(':g', $grupo);
+        $stmt->bindParam(':g', $grupo_familiar);
         $stmt->bindParam(':s', md5( $senha) );
         $stmt->bindParam(':l', $login);
         

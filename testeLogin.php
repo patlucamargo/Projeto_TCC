@@ -23,11 +23,12 @@ if (isset($_POST['submit']) && !empty($_POST['email'] && !empty($_POST['senha'])
                         confirm('Email ou senha invalidos')
                   </script>";
         } else {
-            $_SESSION['email']        = $chkUser['email'];
-            $_SESSION['login']        = $chkUser['login'];
-            $_SESSION['id']           = $chkUser['id'];
-            $_SESSION['nivel_acesso'] = $chkUser['nivel_acesso'];
-            $_SESSION['senha']        = $chkUser['senha'];
+            $_SESSION['email']          = $chkUser['email'];
+            $_SESSION['login']          = $chkUser['login'];
+            $_SESSION['id']             = $chkUser['id'];
+            $_SESSION['nivel_acesso']   = $chkUser['nivel_acesso'];
+            $_SESSION['grupo_familiar'] = $chkUser['grupo_familiar'];
+            $_SESSION['senha']          = $chkUser['senha'];
 
             if ($chkUser['nivel_acesso'] == 'admin') {
                 header('Location: telaAdmin.php'); // Página para administradores

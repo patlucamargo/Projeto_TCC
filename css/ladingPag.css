@@ -1,0 +1,241 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif 'Open Sans';
+    background-color: #f0f0f0;
+    color: #111;
+    max-height: 500px;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #7606fe72;
+  }
+  
+  .botoes-acao {
+    display: flex;
+    align-items: center;
+    margin-right: 37px;
+  }
+  
+  .btn-login,
+  .btn-comecar {
+    text-decoration: none;
+    padding: 6px 14px;
+    font-weight: 500;
+    color: black;
+  }
+  .btn-login:hover {
+    background-color: #983abaf3;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 16px;
+    line-height: 1.2;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color .5s;
+  }
+  
+  .btn-comecar:hover{
+    background-color: #983abaf3;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 16px;
+    line-height: 1.2;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: background-color .5s;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espaço entre imagem e texto */
+    margin-left: 40px;
+    justify-content: space-between;
+    background-color: rgb (217, 204, 224);
+  }
+  
+  .logo-container img {
+    height: 35px; /* ou o tamanho que quiser */
+  }
+  
+  .logo-text {
+    font-size: 20px;   /* Aumente o número conforme quiser */
+    font-weight: 700;  /* Deixa mais forte */
+    color: #2c2c2c;
+  }
+  
+  
+  .containn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 220px;
+    margin-left: -160px;
+  }
+  
+  .left {
+    max-width: 800px;
+  }
+  
+  .left h1 {
+    font-size: 45px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    margin-top: 15px;
+  }
+  
+  .left h1 .highlight {
+    color: #6e04f0;
+    border-bottom: 2px solid #6e04f0;
+  }
+  
+  .left p {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 20px;
+  }
+  
+  .features {
+    display: flex;
+    gap: 40px;
+    margin-top: -14px;
+    margin-left: 960px;
+    padding-right: 40px;
+  }
+  
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .feature-icon {
+    background-color: #6e04f050;
+    padding: 4px;
+    border-radius: 12px;
+    font-size: 24px;
+  }
+  
+  .right img {
+    width: 800%;
+    max-width: 520px;
+    height: 500px;
+    box-shadow: 0 15p 30px rgba(0,0,0,0.1);
+    margin-left: 100px;
+    margin-top: 15px;
+  }
+  
+  .benefits {
+    padding: 200px 60px;
+  }
+  
+  .benefits-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .benefits-image img {
+    max-width: 100px;
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    margin-left: 90px;
+    margin-bottom: 300px;
+  }
+  
+  .benefits-content {
+    max-width: 650px;
+    max-height: 300px;
+  }
+  
+  .benefits-content .subtitle {
+    color: #666;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  .benefits-content h3 {
+    font-size: 26px;
+    margin-bottom: 5px;
+    color: black;
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+  
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 40px;
+    padding-top: -100px;
+    height: auto;
+  }
+  
+  .benefit-item {
+    padding-left: 1px;
+    padding-right: -600px;
+    margin-bottom: -35px;
+    width: 250px;
+  }
+  
+  .benefit-number {
+    background-color: #6e04f050;
+    color: #6e04f0;
+    font-weight: bold;
+    padding: 4px 11px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: -100px;
+  }
+  
+  .benefit-item h4 {
+    font-size: 16px;
+    margin-bottom: 1px;
+    color: #111;
+  }
+  
+  .benefit-item p {
+    font-size: 15px;
+    color: #555;
+  }
+  
+  
+  
+  
+  
+  /* Responsivo
+  @media (max-width: 960px) {
+    .benefits-container {
+      flex-direction: column;
+    }
+  }
+  
+  @media (max-width: 960px) {
+    .container {
+      flex-direction: column;
+      padding: 40px 20px;
+      text-align: center;
+    }
+  }
+  
+  nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+  */
+  
+  
+  

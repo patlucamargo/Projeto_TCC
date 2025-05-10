@@ -3,23 +3,28 @@ session_start();
 require 'Classes\Receita.class.php';
 $con = $receita = new Receita();
 
-if(!$con){
+if (!$con) {
   echo "Erro ao conectar ao banco de dados";
   exit;
-}else{
+} else {
   if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
     unset($_SESSION['login']);
     unset($_SESSION['senha']);
     header('Location: telalogin.php');
   }
   $logado = $_SESSION['login'];
-  $id     = $_SESSION['id'];
+  $id = $_SESSION['id'];
+  $grupo_familiar = $_SESSION['grupo_familiar'];
 
-  // Receitas Pendentes
-  $total_pendente = $receita->receitasPendentes($id);
-  
-  // Receitas Recebidas
-  $total_recebidas = $receita->receitasRecebidas($id);
+  // Pegar o mês e ano atuais para inicializar os valores
+  $mes_atual = date('m');
+  $ano_atual = date('Y');
+
+  // Receitas Pendentes do mês atual
+  $total_pendente = $receita->receitasPendentes($id, $mes_atual, $ano_atual);
+
+  // Receitas Recebidas do mês atual
+  $total_recebidas = $receita->receitasRecebidas($id, $mes_atual, $ano_atual);
 
   // Total Geral
   $total_geral = $total_pendente + $total_recebidas;
@@ -35,6 +40,7 @@ if(!$con){
   <title>Family Financing</title>
   <link rel="stylesheet" href="css/styleTelaReceita.css">
   <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 </head>
 
@@ -47,7 +53,9 @@ if(!$con){
         <span class="project-name">Family Financing</span>
       </div>
       <div class="navbar-right">
-        <span class="user-name"> <?php echo "Ola, $logado"; ?></span>
+        <span class="user-name"> <?php echo "Ola, $logado "; ?> 
+        <br> 
+        <?php echo "Você pertence ao grupo: $grupo_familiar "; ?> </span>
         <button class="logout-btn"><a href="telaHome.php">Voltar ao Home</a></button>
       </div>
     </nav>
@@ -95,25 +103,30 @@ if(!$con){
           </thead>
           <tbody>
             <?php
-                      
+
             $receitas = $receita->receitas($id);
             foreach ($receitas as $key => $linha) {
               # code...
-           
+            
               $status_pago = $linha['pago']; // Exemplo
               $icone_status = $status_pago == '1' // Renderizando o ícone
                 ? '<span style="color: green;">&#x2705;</span>' // Bolinha com verificado
                 : '<span style="color: gray;">&#x26AA;</span>';  // Bolinha vazia
+            
+              // Adiciona o ícone para o tipo de receita
+              $tipo_icone = $linha['tipoReceita'] == 'individual'
+                ? '<i class="far fa-user icon-modify"></i>' // Ícone para individual
+                : '<i class="fas fa-users icon-modify"></i>'; // Ícone para grupo  
 
-                // Pega o ano e mês da receita
+              // Pega o ano e mês da receita
               $data = new DateTime($linha["data_registro"]);
               $ano = $data->format('Y');
               $mes = $data->format('m');
-            
+
               echo "<tr data-ano='{$ano}' data-mes='{$mes}'>";
               echo "<td>" . $icone_status . "</td>";
               echo "<td>" . $linha["data_registro"] . "</td>";
-              echo "<td>" . $linha["categoria"] . "</td>";
+              echo "<td>" . $tipo_icone ."  ". $linha['categoria'] . "</td>";
               echo "<td>" . $linha["valor"] . "</td>";
               echo "<td> <a href='#' class='edit-btn' 
                           data-id='{$linha["id"]}'
@@ -126,11 +139,12 @@ if(!$con){
                           <img src='imagem/lapis1.jpg' alt='Alterar'></a> 
                           &nbsp;&nbsp;
                           <a href='deletReceita.php?id=$linha[id]'><img src='imagem/excluir1.jpg' alt='Deletar'></a>
-                    </td>";;
+                    </td>";
+              ;
 
               echo "</tr>";
-            
-          }
+
+            }
             ?>
 
           </tbody>
@@ -147,6 +161,18 @@ if(!$con){
           <h2>Receita</h2>
           <button type="button" class="close-btn" id="close-btn">&times;</button>
         </header>
+
+        <!-- Definição do tipo de receita -->
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="tipoReceita" value="individual" checked />
+            Individual
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="tipoReceita" value="grupo" />
+            Grupo
+          </label>
+        </div>
 
         <!-- Valor -->
         <div class="form-group">
@@ -195,171 +221,75 @@ if(!$con){
   </div>
 
   <!-- Formulário de Atualização de Receita -->
-<div class="form-container" id="update-form-container">
-  <div class="formulario">
-    <form id="formUpdateReceita" action="updateReceita.php" method="POST">
-      <header class="form-header">
-        <h2>Atualizar Receita</h2>
-        <button type="button" class="close-btn" id="close-update-btn">&times;</button>
-      </header>
+  <div class="form-container" id="update-form-container">
+    <div class="formulario">
+      <form id="formUpdateReceita" action="updateReceita.php" method="POST">
+        <header class="form-header">
+          <h2>Atualizar Receita</h2>
+          <button type="button" class="close-btn" id="close-update-btn">&times;</button>
+        </header>
 
-      <!-- Campo oculto para armazenar o ID da receita -->
-      <input type="hidden" name="id_usuario" id="update-id_usuario">
-      <input type="hidden" name="id" id="update-id">
+        <!-- Campo oculto para armazenar o ID da receita -->
+        <input type="hidden" name="id_usuario" id="update-id_usuario">
+        <input type="hidden" name="id" id="update-id">
 
-      <!-- Valor -->
-      <div class="form-group">
-        <label for="update-valor">Valor</label>
-        <div class="valor-input">
-          <span class="currency">R$</span>
-          <input type="number" name="valor" id="update-valor" step="0.01" required>
+        <!-- Definição do tipo de receita -->
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="tipoReceita" value="individual" checked />Individual</label>
+          <label class="radio-option">
+            <input type="radio" name="tipoReceita" value="grupo" /> Grupo </label>
         </div>
-      </div>
 
-      <!-- Categoria -->
-      <div class="form-group">
-        <label for="update-categoria">Categoria</label>
-        <input type="text" name="categoria" id="update-categoria" required>
-      </div>
-
-      <!-- Data -->
-      <div class="form-group">
-        <div class="form-row">
-          <div class="form-column">
-            <label for="update-data_registro">Data de Registro</label>
-            <input type="date" name="data_registro" id="update-data_registro" required>
-          </div>
-          <div class="form-column">
-            <label for="update-numParcelas">Número de Parcelas</label>
-            <input type="number" name="numParcelas" id="update-numParcelas">
+        <!-- Valor -->
+        <div class="form-group">
+          <label for="update-valor">Valor</label>
+          <div class="valor-input">
+            <span class="currency">R$</span>
+            <input type="number" name="valor" id="update-valor" step="0.01" required>
           </div>
         </div>
-      </div>
 
-      <!-- Estado -->
-      <div class="form-group">
-        <label for="update-pago">Foi recebido?</label>
-        <label class="toggle-switch">
-          <input type="checkbox" name="pago" id="update-pago">
-          <span class="switch-slider"></span>
-        </label>
-      </div>
+        <!-- Categoria -->
+        <div class="form-group">
+          <label for="update-categoria">Categoria</label>
+          <input type="text" name="categoria" id="update-categoria" required>
+        </div>
 
-      <!-- Botões -->
-      <div class="form-footer">
-        <button type="submit" class="submit-btn" id="submit" name="submit">Salvar</button>
-        <button type="button" class="cancel-btn" id="cancel-update-btn">Cancelar</button>
-      </div>
-    </form>
+        <!-- Data -->
+        <div class="form-group">
+          <div class="form-row">
+            <div class="form-column">
+              <label for="update-data_registro">Data de Registro</label>
+              <input type="date" name="data_registro" id="update-data_registro" required>
+            </div>
+            <div class="form-column">
+              <label for="update-numParcelas">Número de Parcelas</label>
+              <input type="number" name="numParcelas" id="update-numParcelas">
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado -->
+        <div class="form-group">
+          <label for="update-pago">Foi recebido?</label>
+          <label class="toggle-switch">
+            <input type="checkbox" name="pago" id="update-pago">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <!-- Botões -->
+        <div class="form-footer">
+          <button type="submit" class="submit-btn" id="submit" name="submit">Salvar</button>
+          <button type="button" class="cancel-btn" id="cancel-update-btn">Cancelar</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-  <script>
-    // Adicione este código no início do script para ocultar o formulário ao carregar a página
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
+  <script src="js/telaReceita.js"></script>
 
-    function abrirModal() {
-      document.querySelector(".form-container").style.display = "flex";
-    }
-
-    document.getElementById("close-btn").addEventListener("click", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
-
-    document.getElementById("cancel-btn").addEventListener("click", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
-
-
-// Abrir Modal de Atualização ao Clicar no Ícone de Edição
-document.querySelectorAll(".edit-btn").forEach(button => {
-  button.addEventListener("click", function (event) {
-    event.preventDefault(); // Evita a navegação padrão
-
-    // Pegando os dados do botão clicado
-    const id_usuario = this.getAttribute("data-id_usuario");
-    const id = this.getAttribute("data-id");
-    const valor = this.getAttribute("data-valor");
-    const categoria = this.getAttribute("data-categoria");
-    const data_registro = this.getAttribute("data-data_registro");
-    const numParcelas = this.getAttribute("data-numParcelas");
-    const pago = this.getAttribute("data-pago") === "1"; // Converte string para booleano
-
-    // Preenchendo os campos do formulário
-    document.getElementById("update-id_usuario").value = id_usuario;
-    document.getElementById("update-id").value = id;
-    document.getElementById("update-valor").value = valor;
-    document.getElementById("update-categoria").value = categoria;
-    document.getElementById("update-data_registro").value = data_registro;
-    document.getElementById("update-numParcelas").value = numParcelas;
-    document.getElementById("update-pago").checked = pago;
-
-    // Exibir o modal de atualização
-    document.getElementById("update-form-container").style.display = "flex";
-  });
-});
-
-// Fechar Modal de Atualização
-document.getElementById("close-update-btn").addEventListener("click", function () {
-  document.getElementById("update-form-container").style.display = "none";
-});
-
-document.getElementById("cancel-update-btn").addEventListener("click", function () {
-  document.getElementById("update-form-container").style.display = "none";
-});
-
-//Controlando as receitas por mes
-document.addEventListener("DOMContentLoaded", function () {
-  let hoje = new Date();
-  let mesAtual = hoje.getMonth(); // 0 = Janeiro, 1 = Fevereiro, etc
-  let anoAtual = hoje.getFullYear();
-
-  const nomeMes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-
-  function atualizarTabela() {
-    const linhas = document.querySelectorAll("tbody tr");
-
-    linhas.forEach(linha => {
-      const anoLinha = parseInt(linha.getAttribute("data-ano"));
-      const mesLinha = parseInt(linha.getAttribute("data-mes")) - 1; // porque JavaScript começa o mês em 0
-
-      if (anoLinha === anoAtual && mesLinha === mesAtual) {
-        linha.style.display = ""; // Mostra
-      } else {
-        linha.style.display = "none"; // Esconde
-      }
-    });
-
-    // Atualiza o título acima da tabela
-    document.getElementById("mes-ano").textContent = `${nomeMes[mesAtual]} ${anoAtual}`;
-  }
-
-  document.getElementById("mes-anterior").addEventListener("click", function () {
-    mesAtual--;
-    if (mesAtual < 0) {
-      mesAtual = 11;
-      anoAtual--;
-    }
-    atualizarTabela();
-  });
-
-  document.getElementById("mes-proximo").addEventListener("click", function () {
-    mesAtual++;
-    if (mesAtual > 11) {
-      mesAtual = 0;
-      anoAtual++;
-    }
-    atualizarTabela();
-  });
-
-  // Primeira atualização ao carregar
-  atualizarTabela();
-});
-
-  </script>
 </body>
 
 </html>

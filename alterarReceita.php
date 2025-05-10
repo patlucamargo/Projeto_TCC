@@ -13,12 +13,13 @@ $result = $pdo->query($sqlSelect);
 if($result->num_rows > 0){
     while($user_data = mysqli_fetch_assoc($result)){
 
-$id = $user_data['id'];
-$valor = $user_data['valor'];
-$categoria = $user_data['categoria'];
-$dt = $user_data['data_registro']; // Usa a data atual se não for informada
-$numero_parcelas = $user_data['numParcelas'] ?: 1; // Define 1 parcela como padrão se não for informada
-$pago = $user_data['pago'];
+$id                 = $user_data['id'];
+$valor              = $user_data['valor'];
+$categoria          = $user_data['categoria'];
+$tipoReceita        = $user_data['tipoReceita'];
+$dt                 = $user_data['data_registro']; // Usa a data atual se não for informada
+$numero_parcelas    = $user_data['numParcelas'] ?: 1; // Define 1 parcela como padrão se não for informada
+$pago               = $user_data['pago'];
     }
 
 }else{

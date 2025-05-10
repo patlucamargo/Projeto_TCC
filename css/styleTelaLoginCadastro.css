@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif 'Open Sans';
+    font-family: Arial, sans-serif;
 }
 
 .navbar {
@@ -14,8 +14,35 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #7606fe72;
+    background-color:  #7606fe72;
 }
+
+.logout-btn {
+    background-color: #983abaf3;
+    text-decoration: none;
+    color: black;
+    border: none;
+    padding: 6px 14px;
+    margin-left: 1150px;
+    font-weight: 500;
+    font-size: 14px;
+    
+  }
+  
+  .logout-btn:hover {
+    background-color: #983abaf3;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 16px;
+    line-height: 1.2;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color .5s;
+  }
+  
 
 .logo-container {
     display: flex;
@@ -24,15 +51,19 @@ body {
     margin-left: 40px;
     justify-content: space-between;
     background-color: rgb (217, 204, 224);
+    margin: 3px;
 }
   
 .logo-container img {
-    height: 35px; /* ou o tamanho que quiser */
+    width: 30px;
+    height: 30px;
+    margin-right: 2px;
+    margin-left: -5px;
 }
   
 .logo-text {
     font-size: 20px;   /* Aumente o número conforme quiser */
-    font-weight: 700;  /* Deixa mais forte */
+     /* Deixa mais forte */
     color: #2c2c2c;
 }
     
@@ -67,7 +98,7 @@ body {
 
 .title {
     font-size: 28px;
-    font-weight: bold;
+
     text-transform: capitalize;
 }
 
@@ -81,7 +112,7 @@ body {
 
 .description {
     font-size: 14px;
-    font-weight: 300;
+    
     line-height: 30px;
 }
 
@@ -414,7 +445,6 @@ input:-webkit-autofill
         width: 40%;
     }
 }
-
 
 
 

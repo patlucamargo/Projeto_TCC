@@ -20,8 +20,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(217, 204, 224);
-  color: white;
+  background-color: #7606fe72;
+  color: #2c2c2c;
   padding: 10px 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -52,8 +52,9 @@ body {
   font-weight: bold;
 }
 
+
 .logout-btn {
-  background-color: #ff5722;
+  background-color: #0c1c50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -64,7 +65,9 @@ body {
 }
 
 .logout-btn:hover {
-  background-color: #e64a19;
+  background-color: #983abaf3;
+  color: #fff;
+  transform: .5s;
 }
 
 /* Main Container */
@@ -332,3 +335,29 @@ font-size: 14px;
 width: 100%;
 }
 
+.radio-group {
+  display: flex;
+  gap: 20px; /* espaço entre opções */
+  align-items: center;
+  margin-bottom: 16px; /* distância abaixo do grupo */
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* espaço entre o radio e o texto */
+  font-weight: 500;
+}
+
+.icon-modify {
+  margin-left: 6px;
+  font-size: 18px;
+}
+
+.far.fa-user.icon-modify {
+  color: #3498db; /* Azul para usuário individual */
+}
+
+.fas.fa-users.icon-modify {
+  color: #9b59b6; /* Roxo para grupo */
+}

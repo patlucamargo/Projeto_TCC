@@ -19,11 +19,12 @@ if (!$rec) {
             $id = $_POST['id'];
             $valor = $_POST['valor'];
             $categoria = $_POST['categoria'];
+            $tipoReceita = $_POST['tipoReceita'];
             $data_registro = $_POST['data_registro'];
             $numero_parcelas = $_POST['numParcelas'] ?: 1;
             $pago = isset($_POST['pago']) ? 1 : 0;
 
-            $receita->alterarReceita($id, $categoria, $valor, $data_registro, $numParcelas, $pago);
+            $receita->alterarReceita($id, $categoria, $tipoReceita, $valor, $data_registro, $numParcelas, $pago);
 
         } else {
             echo "Erro ao conectar ao banco de dados";
