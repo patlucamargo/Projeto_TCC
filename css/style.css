@@ -109,3 +109,8 @@ a.button {
 a.button:hover {
   background-color: #0056b3; /* Cor ao passar o mouse */
 }
+
+.grafico-container {
+      width: 100%;
+      max-width: 500px;
+    }

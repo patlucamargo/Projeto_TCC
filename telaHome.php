@@ -5,7 +5,7 @@ include 'Classes/Receita.class.php';
 include 'Classes/Despesa.class.php';
 
 
-if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
+if ((!isset($_SESSION['email'])) and (!isset($_SESSION['senha']))) {
 
     unset($_SESSION['email']);
     unset($_SESSION['senha']);
@@ -13,29 +13,30 @@ if ( (!isset($_SESSION['email']) ) and ( !isset($_SESSION['senha'] ) ) ) {
 }
 
 $logado = $_SESSION['login'];
-$email  = $_SESSION['email'];
-$id     = $_SESSION['id'];
+$email = $_SESSION['email'];
+$id = $_SESSION['id'];
 
 $con = $receita = new Receita();
-if(!$con){
+if (!$con) {
     echo "<script>
             confirm('Erro ao conectar ao banco de dados')
         </script>";
-}else{
+} else {
     $total_receitas = $receita->somaReceitas($id);
 }
 
 $con = $despesa = new Despesa();
-if(!$con){
+if (!$con) {
     echo "<script>
             confirm('Erro ao conectar ao banco de dados')
         </script>";
-}else{
+} else {
     $total_despesas = $despesa->despesasPendentes($id);
 }
 
-    // Total Geral
-    $total_saldo = $total_receitas - $total_despesas;
+// Total Geral
+$total_saldo = $total_receitas - $total_despesas;
+
 
 
 ?>
@@ -49,11 +50,12 @@ if(!$con){
     <title>Family Financing</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <header>
-   
+
         <div class="container">
             <!-- Navbar -->
             <nav class="navbar">
@@ -91,6 +93,9 @@ if(!$con){
         </div>
         </div>
     </section>
+
+    <script src="js/script.js"></script>
+
 
 </body>
 

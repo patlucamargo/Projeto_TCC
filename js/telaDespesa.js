@@ -1,10 +1,10 @@
-// Adicione este código no início do script para ocultar o formulário ao carregar a página
+// Script de controle para tela de despesas
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelector(".form-container").style.display = "none";
   document.getElementById("update-form-container").style.display = "none";
 });
 
-
+// Função para abrir o modal de nova despesa
 function abrirModal() {
   document.querySelector(".form-container").style.display = "flex";
 }
@@ -20,26 +20,36 @@ document.getElementById("cancel-btn").addEventListener("click", function () {
 // Abrir Modal de Atualização ao Clicar no Ícone de Edição
 document.querySelectorAll(".edit-btn").forEach(button => {
   button.addEventListener("click", function (event) {
-    event.preventDefault(); // Evita a navegação padrão
+    event.preventDefault();
 
-    // Pegando os dados do botão clicado
+    // Pegar os dados do botão clicado
     const id_usuario = this.getAttribute("data-id_usuario");
     const id = this.getAttribute("data-id");
     const valor = this.getAttribute("data-valor");
     const categoria = this.getAttribute("data-categoria");
-    const tipoReceita = this.getAttribute("data-tipoReceita");
-    const data_registro = this.getAttribute("data-data_registro");
-    const numParcelas = this.getAttribute("data-numParcelas");
-    const pago = this.getAttribute("data-pago") === "1"; // Converte string para booleano
+    const tipoDespesa = this.getAttribute("data-tipoDespesa");
+    const descricao = this.getAttribute("data-descricao");
+    const dataVenc = this.getAttribute("data-dataVenc");
+    const pago = this.getAttribute("data-pago") === "1";
 
-    // Preenchendo os campos do formulário
+    // Preencher os campos do formulário
     document.getElementById("update-id_usuario").value = id_usuario;
     document.getElementById("update-id").value = id;
     document.getElementById("update-valor").value = valor;
     document.getElementById("update-categoria").value = categoria;
-    document.getElementById("update-tipoReceita").value = tipoReceita;
-    document.getElementById("update-data_registro").value = data_registro;
-    document.getElementById("update-numParcelas").value = numParcelas;
+    
+    // Corrigir o preenchimento dos radio buttons
+    const radioIndividual = document.querySelector('input[name="tipoDespesa"][value="individual"]');
+    const radioGrupo = document.querySelector('input[name="tipoDespesa"][value="grupo"]');
+    
+    if (tipoDespesa === "individual") {
+      radioIndividual.checked = true;
+    } else {
+      radioGrupo.checked = true;
+    }
+    
+    document.getElementById("update-descricao").value = descricao;
+    document.getElementById("update-dataVenc").value = dataVenc;
     document.getElementById("update-pago").checked = pago;
 
     // Exibir o modal de atualização
@@ -56,10 +66,10 @@ document.getElementById("cancel-update-btn").addEventListener("click", function 
   document.getElementById("update-form-container").style.display = "none";
 });
 
-// Controlando as receitas por mês
+// Controlando as despesas por mês
 document.addEventListener("DOMContentLoaded", function () {
   let hoje = new Date();
-  let mesAtual = hoje.getMonth(); 
+  let mesAtual = hoje.getMonth();
   let anoAtual = hoje.getFullYear();
 
   const nomeMes = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -67,13 +77,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function atualizarTabela() {
     const linhas = document.querySelectorAll("tbody tr");
+    let linhasVisiveis = 0;
 
     linhas.forEach(linha => {
       const anoLinha = parseInt(linha.getAttribute("data-ano"));
-      const mesLinha = parseInt(linha.getAttribute("data-mes")) - 1; // porque JavaScript começa o mês em 0
+      const mesLinha = parseInt(linha.getAttribute("data-mes")) - 1; // JS começa mês em 0
 
       if (anoLinha === anoAtual && mesLinha === mesAtual) {
         linha.style.display = ""; // Mostra
+        linhasVisiveis++;
       } else {
         linha.style.display = "none"; // Esconde
       }
@@ -83,38 +95,48 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("mes-ano").textContent = `${nomeMes[mesAtual]} ${anoAtual}`;
 
     // Atualiza os valores dos cards de resumo
-    atualizarCardsMes(mesAtual + 1, anoAtual); // +1 porque mês no JS começa em 0, mas no PHP começa em 1
+    atualizarCardsMes(mesAtual + 1, anoAtual); // +1 porque PHP começa mês em 1
+    
+    // Log para debug
+    console.log(`Mês: ${mesAtual + 1}, Ano: ${anoAtual}, Linhas visíveis: ${linhasVisiveis}`);
   }
 
-  // Função para atualizar os cards de resumo via AJAX
+  // Função para atualizar os cards via AJAX
   function atualizarCardsMes(mes, ano) {
-    // Criar um objeto FormData para enviar os dados
     const formData = new FormData();
     formData.append('mes', mes);
     formData.append('ano', ano);
 
-    // Fazer uma requisição AJAX para buscar os novos valores
-    fetch('buscarValoresReceitaMes.php', {
+    fetch('buscarValoresDespesaMes.php', {
       method: 'POST',
       body: formData
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
+        console.log('Dados recebidos:', data); // Log para debug
+        
         // Atualizar os valores nos cards
         document.querySelector('.card:nth-child(1) p').textContent =
-          'R$ ' + data.pendentes.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          'R$ ' + parseFloat(data.pendentes || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
         document.querySelector('.card:nth-child(2) p').textContent =
-          'R$ ' + data.recebidas.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          'R$ ' + parseFloat(data.recebidas || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
         document.querySelector('.card:nth-child(3) p').textContent =
-          'R$ ' + data.total.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          'R$ ' + parseFloat(data.total || 0).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       })
       .catch(error => {
         console.error('Erro ao buscar dados:', error);
+        
       });
   }
 
+  // Configurar os botões de navegação de mês
   document.getElementById("mes-anterior").addEventListener("click", function () {
     mesAtual--;
     if (mesAtual < 0) {

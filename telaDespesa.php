@@ -1,30 +1,43 @@
 <?php
 session_start();
-include("Classes\Despesa.class.php");
-$despesa = new Despesa();
+include 'Classes\Despesa.class.php';
+$con = $despesa = new Despesa();
 
-if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+if (!$con){
+  echo "Erro ao conectar ao banco de dados";
+  exit;
+}else{
+  if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
 
   unset($_SESSION['login']);
   unset($_SESSION['senha']);
-  header('Location: telalogin.php');
+  header('Location: telalogin&cadastro.php');
 }
 
 $logado = $_SESSION['login'];
 $id=$_SESSION['id'];
+$grupo_familiar = $_SESSION['grupo_familiar'];
+$nivel_acesso = $_SESSION['nivel_acesso'];
+
+// Pegar o mês e ano atuais para inicializar os valores
+  $mes_atual = date('m');
+  $ano_atual = date('Y');
 
 // Despesas Pendentes
- $total_pendentes = $despesa->despesasPendentes($id);
+ $total_pendentes = $despesa->despesasPendentesMes($id, $mes_atual, $ano_atual);
 
 // Despesas Recebidas
-
-
- $total_recebidas = $despesa->despesasRecebidas($id);
-
+ $total_recebidas = $despesa->despesasRecebidasMes($id, $mes_atual, $ano_atual);
 
  // Total Geral
  $total_geral = $total_pendentes + $total_recebidas;
-// ?>
+
+
+
+
+ 
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -35,8 +48,8 @@ $id=$_SESSION['id'];
   <title>Family Financing</title>
   <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styleTelaReceita.css">
-  <script src="js"></script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
 </head>
 
 <body>
@@ -48,8 +61,11 @@ $id=$_SESSION['id'];
         <span class="project-name">Family Financing</span>
       </div>
       <div class="navbar-right">
-        <span class="user-name"> <?php echo "Ola, $logado"; ?> </span>
-        <a href="telaHome.php"><button class="logout-btn">Voltar ao Home</button></a>
+        <span class="user-name"> <?php echo "Ola, $logado"; ?> 
+      <br> 
+        <?php echo "Você pertence ao grupo: $grupo_familiar "; ?>
+      </span>
+        <a href="telaHome.php"><button class="logout-btn">Home</a></button>
       </div>
     </nav>
 
@@ -58,11 +74,11 @@ $id=$_SESSION['id'];
 
       <header class="header">
         <h1>Despesas</h1>
-        <button id="nova-despesa-btn" onclick="abrirModal()" class="logout-btn"> Nova despesa</a></button>
+        <button id="nova-receita-btn" onclick="abrirModal()" class="logout-btn"> Nova despesa</a></button>
       </header>
 
       <!-- Resumo -->
-      <!-- <section class="summary">
+      <section class="summary">
         <div class="card">
           <h2>Despesas pendentes</h2>
           <p>R$ <?php echo number_format($total_pendentes, 2, ',', '.'); ?></p>
@@ -75,7 +91,7 @@ $id=$_SESSION['id'];
           <h2>Total</h2>
           <p>R$ <?php echo number_format($total_geral, 2, ',', '.'); ?></p>
         </div>
-      </section> -->
+      </section>
 
       <!-- Tabela de despesas com navegação -->
       <section class="despesas">
@@ -97,27 +113,38 @@ $id=$_SESSION['id'];
           </thead>
           <tbody>
             <?php
-            foreach ($despesa as $key => $linha) {
+
+            $despesas = $despesa->despesas($id);
+            foreach ($despesas as $key => $linha) {
               # code...
            
               $status_pago = $linha['pago']; // Exemplo
-            
-              // Renderizando o ícone
-              $icone_status = $status_pago == '1'
+              $icone_status = $status_pago == '1' // Renderizando o ícone
                 ? '<span style="color: green;">&#x2705;</span>' // Bolinha com verificado
                 : '<span style="color: gray;">&#x26AA;</span>';  // Bolinha vazia
             
+              // Adiciona o ícone para o tipo de receita
+              $tipo_icone = $linha['tipoDespesa'] == 'individual'
+                ? '<i class="far fa-user icon-modify"></i>' // Ícone para individual
+                : '<i class="fas fa-users icon-modify"></i>'; // Ícone para grupo  
 
-              echo "<tr>";
+               // Pega o ano e mês da Despesa
+              $data = new DateTime($linha["dataVenc"]);
+              $ano = $data->format('Y');
+              $mes = $data->format('m');  
+
+              echo "<tr data-ano='{$ano}' data-mes='{$mes}'>";
               echo "<td>" . $icone_status . "</td>";
               echo "<td>" . $linha["dataVenc"] . "</td>";
-              echo "<td>" . $linha["categoria"] . "</td>";
+              echo "<td>" . $tipo_icone ."  ". $linha["categoria"] . "</td>";
               echo "<td>" . $linha["descricao"] . "</td>";
               echo "<td>" . $linha["valor"] . "</td>";
               echo "<td><a href='#' class='edit-btn' 
                         data-id='{$linha["id"]}' 
+                        data-id_usuario='{$linha["id_usuario"]}'
                         data-valor='{$linha["valor"]}' 
                         data-categoria='{$linha["categoria"]}' 
+                        data-tipoDespesa='{$linha["tipoDespesa"]}'
                         data-descricao='{$linha["descricao"]}' 
                         data-dataVenc='{$linha["dataVenc"]}' 
                         data-pago='{$linha["pago"]}'>
@@ -138,7 +165,7 @@ $id=$_SESSION['id'];
 
   <!-- Formulario de inserir despesas -->
 
-  <div class="form-container">
+  <div class="form-container" id="form-container">
     <div class="formulario">
       <form id="formNovaDespesa" action="inserirDespesa.php" method="POST">
         <header class="form-header">
@@ -146,6 +173,20 @@ $id=$_SESSION['id'];
           <button type="button" class="close-btn" id="close-btn">&times;</button>
 
         </header>
+
+        <input type="hidden" name="id_usuario" value="<?php echo $_SESSION['id']; ?>">
+
+         <!-- Definição do tipo de Despesa -->
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="tipoDespesa" value="individual" checked />
+            Individual
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="tipoDespesa" value="grupo" />
+            Grupo
+          </label>
+        </div>
 
         <!-- Valor -->
         <div class="form-group">
@@ -159,8 +200,9 @@ $id=$_SESSION['id'];
         <!-- Categoria -->
         <div class="form-group">
           <label for="categoria">Categoria</label>
+          <div class="valor-input">
           <input type="text" id="categoria" name="categoria" placeholder="" required>
-
+          </div>
         </div>
 
         <!-- Descrição -->
@@ -177,7 +219,6 @@ $id=$_SESSION['id'];
               <label for="dataVenc"><b>Data de Registro</b></label>
               <input type="date" name="dataVenc" id="dataVenc" required>
             </div>
-
           </div>
         </div>
 
@@ -193,7 +234,7 @@ $id=$_SESSION['id'];
         <!-- Botões -->
         <div class="form-footer">
           <button type="submit" name="submit" class="submit-btn">Salvar</button>
-          <button type="button" class="cancel-btn" id="cancel-btn"> Cancelar</button>
+          <button type="button" class="cancel-btn" id="cancel-btn">Cancelar</button>
         </div>
       </form>
     </div>
@@ -209,7 +250,16 @@ $id=$_SESSION['id'];
         </header>
 
         <!-- Campo oculto para armazenar o ID da despesa -->
+         <input type="hidden" name="id_usuario" id="update-id_usuario">
         <input type="hidden" name="id" id="update-id">
+
+         <!-- Definição do tipo de receita -->
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="tipoDespesa" value="individual" id="update-tipoDespesa" checked />Individual</label>
+          <label class="radio-option">
+            <input type="radio" name="tipoDespesa" value="grupo" id="update-tipoDespesa" /> Grupo </label>
+        </div>
 
         <!-- Valor -->
         <div class="form-group">
@@ -234,8 +284,12 @@ $id=$_SESSION['id'];
 
         <!-- Data -->
         <div class="form-group">
+          <div class="form-row">
+          <div class="form-column">  
           <label for="update-dataVenc">Data de Registro</label>
           <input type="date" name="dataVenc" id="update-dataVenc" required>
+        </div>
+        </div>
         </div>
 
         <!-- Pago -->
@@ -257,60 +311,7 @@ $id=$_SESSION['id'];
   </div>
 
 
-  <script>
-    // Adicione este código no início do script para ocultar o formulário ao carregar a página
-    document.addEventListener("DOMContentLoaded", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
-
-    function abrirModal() {
-      document.querySelector(".form-container").style.display = "flex";
-    }
-
-    document.getElementById("close-btn").addEventListener("click", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
-
-    document.getElementById("cancel-btn").addEventListener("click", function () {
-      document.querySelector(".form-container").style.display = "none";
-    });
-
-    // Abrir Modal de Atualização ao Clicar no Ícone de Edição
-    document.querySelectorAll(".edit-btn").forEach(button => {
-      button.addEventListener("click", function (event) {
-        event.preventDefault(); // Evita a navegação padrão
-
-        // Pegando os dados do botão clicado
-        const id = this.getAttribute("data-id");
-        const valor = this.getAttribute("data-valor");
-        const categoria = this.getAttribute("data-categoria");
-        const descricao = this.getAttribute("data-descricao");
-        const dataVenc = this.getAttribute("data-dataVenc");
-        const pago = this.getAttribute("data-pago") === "1"; // Converte string para booleano
-
-        // Preenchendo os campos do formulário
-        document.getElementById("update-id").value = id;
-        document.getElementById("update-valor").value = valor;
-        document.getElementById("update-categoria").value = categoria;
-        document.getElementById("update-descricao").value = descricao;
-        document.getElementById("update-dataVenc").value = dataVenc;
-        document.getElementById("update-pago").checked = pago;
-
-        // Exibir o modal de atualização
-        document.getElementById("update-form-container").style.display = "flex";
-      });
-    });
-
-    // Fechar Modal de Atualização
-    document.getElementById("close-update-btn").addEventListener("click", function () {
-      document.getElementById("update-form-container").style.display = "none";
-    });
-
-    document.getElementById("cancel-update-btn").addEventListener("click", function () {
-      document.getElementById("update-form-container").style.display = "none";
-    });
-
-  </script>
+  <script src="js/telaDespesa.js"></script>
 </body>
 
 </html>

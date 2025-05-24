@@ -10,8 +10,7 @@ if (!$rec) {
     if ((!isset($_SESSION['login'])) && (!isset($_SESSION['senha']))) {
         unset($_SESSION['login']);
         unset($_SESSION['senha']);
-        header('Location: telalogin.php');
-
+        header('Location: telalogin&cadastro.php');
     } else {
 
         if (isset($_POST['submit'])) {

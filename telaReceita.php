@@ -8,13 +8,16 @@ if (!$con) {
   exit;
 } else {
   if ((!isset($_SESSION['login']) == true) and (!isset($_SESSION['senha']) == true)) {
+
     unset($_SESSION['login']);
     unset($_SESSION['senha']);
     header('Location: telalogin.php');
   }
+  
   $logado = $_SESSION['login'];
   $id = $_SESSION['id'];
   $grupo_familiar = $_SESSION['grupo_familiar'];
+  $nivel_acesso = $_SESSION['nivel_acesso'];
 
   // Pegar o mês e ano atuais para inicializar os valores
   $mes_atual = date('m');
@@ -56,7 +59,7 @@ if (!$con) {
         <span class="user-name"> <?php echo "Ola, $logado "; ?> 
         <br> 
         <?php echo "Você pertence ao grupo: $grupo_familiar "; ?> </span>
-        <button class="logout-btn"><a href="telaHome.php">Voltar ao Home</a></button>
+        <button class="logout-btn"><a href="telaHome.php">Home</a>
       </div>
     </nav>
 
@@ -133,6 +136,7 @@ if (!$con) {
                           data-id_usuario='{$linha["id_usuario"]}' 
                           data-valor='{$linha["valor"]}' 
                           data-categoria='{$linha["categoria"]}' 
+                          data-tipoReceita='{$linha["tipoReceita"]}'
                           data-data_registro='{$linha["data_registro"]}' 
                           data-numParcelas='{$linha["numParcelas"]}' 
                           data-pago='{$linha["pago"]}'>
@@ -191,18 +195,22 @@ if (!$con) {
           </div>
         </div>
 
+        <!-- Data de Registro -->
         <div class="form-group">
           <div class="form-row">
             <div class="form-column">
               <label for="data_registro"><b>Data de Registro</b></label>
               <input type="date" name="data_registro" id="data_registro" required>
             </div>
+
+            <!-- Numero de Parcelas -->
             <div class="form-column">
               <label for="numParcelas">Número de Parcelas</label>
               <input type="number" name="numParcelas" placeholder="Nº de parcelas">
             </div>
           </div>
         </div>
+
         <!-- Estado -->
         <div class="form-group">
           <label for="pago">Foi recebido?</label>
@@ -211,10 +219,11 @@ if (!$con) {
             <span class="switch-slider"></span>
           </label>
         </div>
+
         <!-- Botões -->
         <div class="form-footer">
           <button type="submit" name="submit" class="submit-btn">Salvar</button>
-          <button type="button" class="cancel-btn" id="cancel-btn"> Cancelar</a></button>
+          <button type="button" class="cancel-btn" id="cancel-btn"> Cancelar</button>
         </div>
       </form>
     </div>
@@ -236,9 +245,9 @@ if (!$con) {
         <!-- Definição do tipo de receita -->
         <div class="radio-group">
           <label class="radio-option">
-            <input type="radio" name="tipoReceita" value="individual" checked />Individual</label>
+            <input type="radio" name="tipoReceita" value="individual" id="update-tipoReceita" checked />Individual</label>
           <label class="radio-option">
-            <input type="radio" name="tipoReceita" value="grupo" /> Grupo </label>
+            <input type="radio" name="tipoReceita" value="grupo" id="update-tipoReceita" /> Grupo </label>
         </div>
 
         <!-- Valor -->
@@ -263,6 +272,8 @@ if (!$con) {
               <label for="update-data_registro">Data de Registro</label>
               <input type="date" name="data_registro" id="update-data_registro" required>
             </div>
+
+            <!-- Numero de Parcelas -->
             <div class="form-column">
               <label for="update-numParcelas">Número de Parcelas</label>
               <input type="number" name="numParcelas" id="update-numParcelas">
