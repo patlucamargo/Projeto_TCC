@@ -5,6 +5,7 @@ include 'Classes/Receita.class.php';
 include 'Classes/Despesa.class.php';
 include 'Classes/Usuario.class.php';
 
+
 if ((!isset($_SESSION['email'])) and (!isset($_SESSION['senha']))) {
     unset($_SESSION['email']);
     unset($_SESSION['senha']);
@@ -16,7 +17,6 @@ $email = $_SESSION['email'];
 $id = $_SESSION['id'];
 $nivel_acesso = $_SESSION['nivel_acesso'];
 $grupo_familiar = $_SESSION['grupo_familiar'];
-
 
 $con = $receita = new Receita();
 if (!$con) {
@@ -54,6 +54,7 @@ $dataUsuario = $usuario->usuario($id);
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -85,6 +86,8 @@ $dataUsuario = $usuario->usuario($id);
 
     <!-- Container principal que será empurrado pelo sidebar -->
     <div class="main-container">
+    <header>
+
         <div class="container">
             <!-- Profile Panel -->
             <div class="profile-panel" id="profilePanel">
@@ -200,6 +203,8 @@ $dataUsuario = $usuario->usuario($id);
 
     <script src="js/script.js"></script>
     <script src="js/scriptMenu.js"></script>
+
+    
 
 </body>
 

@@ -19,12 +19,15 @@ if (!$desp) {
                         // Obtém os dados do formulário
                         $categoria = $_POST['categoria'];
                         $descricao = $_POST['descricao'];
+
                         if(empty($_POST['tipoDespesa'])) {
                                 $tipoDespesa = 'individual'; // Define 'Fixa' como padrão se não for informado
                         } else {
                                 $tipoDespesa = $_POST['tipoDespesa'];
                         }
                         
+
+                        $tipoDespesa = $_POST['tipoDespesa'];
                         $valor = $_POST['valor'];
                         $dataVenc = $_POST['dataVenc']; // Usa a data atual se não for informada
                         $pago = isset($_POST['pago']) ? 1 : 0;

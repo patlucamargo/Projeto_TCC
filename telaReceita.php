@@ -54,6 +54,20 @@ $dataUsuario = $usuario->usuario($id);
 </head>
 
 <body>
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="imagem/logo_Fam_Finan.png" alt="Ícone" class="navbar-icon">
+        <span class="project-name">Family Financing</span>
+      </div>
+      <div class="navbar-right">
+        <span class="user-name"> <?php echo "Ola, $logado "; ?> 
+        <br> 
+        <?php echo "Você pertence ao grupo: $grupo_familiar "; ?> </span>
+        <button class="logout-btn"><a href="telaHome.php">Home</a>
+      </div>
+    </nav>
 
   <!-- Navbar -->
   <nav class="navbar">
@@ -351,6 +365,7 @@ $dataUsuario = $usuario->usuario($id);
           <label class="radio-option">
             <input type="radio" name="tipoReceita" value="individual" id="update-tipoReceita"
               checked />Individual</label>
+            <input type="radio" name="tipoReceita" value="individual" id="update-tipoReceita" checked />Individual</label>
           <label class="radio-option">
             <input type="radio" name="tipoReceita" value="grupo" id="update-tipoReceita" /> Grupo </label>
         </div>
