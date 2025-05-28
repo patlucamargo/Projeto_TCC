@@ -105,5 +105,61 @@ class Usuario{
         }
     }
 
+public function updateUsuario( $id, $nome, $email, $login ){
+        
+        $sql = "UPDATE usuarios SET nome_completo=:n, email=:e, login= :l WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':n', $nome);
+        $stmt->bindParam(':e', $email);
+        $stmt->bindParam(':l', $login);
+        
+        return $stmt->execute();
+
+    }
+
+    public function usuario($id, $nome = null, $email = null, $login = null, $grupo_familiar = null){
+
+        $consulta = "SELECT * FROM usuarios WHERE id = :id";
+        $resultado = $this->pdo->prepare($consulta);
+        $resultado->bindValue(":id", $id);
+        $resultado->execute();
+        
+        if($resultado->rowCount() > 0){
+            return $resultado->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        return false;
+    }
+    
+    public function getMembrosGrupo($grupo_familiar, $excluir_id = null){
+        $sql = "SELECT id, nome_completo, contribuicao_percent FROM usuarios WHERE grupo_familiar = :grupo";
+        
+        if($excluir_id){
+            $sql .= " AND id != :excluir_id";
+        }
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':grupo', $grupo_familiar);
+        
+        if($excluir_id){
+            $stmt->bindParam(':excluir_id', $excluir_id);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+          
+    public function deletUsuario($id)
+    {
+        $consulta = "DELETE FROM usuario WHERE id = :id";
+        $resultado = $this->pdo->prepare($consulta);
+        $resultado->bindValue(":id", $id);
+
+        $resultado->execute();
+        return $resultado->fetchAll();
+    }
 
 }

@@ -1,0 +1,865 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.contain {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
+}
+
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.project-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+
+.logout-btn {
+  background-color: #d01de0;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background-color: #983abaf3;
+  color: #fff;
+  transform: .5s;
+}
+
+/* Main Container */
+.main-container {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 24px;
+  color: rgb(68, 36, 247);
+}
+
+/* Summary Section */
+.summary {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.card {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: rgb(68, 36, 247);
+}
+
+.card p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Navegação de mês */
+.mes-navegacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mes-navegacao h2 {
+  margin: 0 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.nav-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background-color: #3c3aba;
+}
+
+/* Tabela de visualização */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+table th {
+  background-color: #f5f5f5;
+}
+
+
+table td input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/*Formulario Despesa */
+.form-container {
+  position: fixed;  /* fixed para cobrir toda a tela */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;  /* DEixa o formulario inicialmente oculto */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;  /* Para garantir que fique acima de outros elementos */
+}
+
+/*Estilização do formulario*/
+.formulario {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.form-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.form-header h2 {
+font-size: 20px;
+color: rgb(68, 36, 247);
+}
+
+.close-btn {
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+}
+
+.form-group {
+margin-bottom: 15px;
+}
+
+.form-group label {
+display: block;
+font-weight: bold;
+margin-bottom: 5px;
+
+}
+
+label {
+font-weight: bold;
+margin-bottom: 5px;
+
+}
+
+.form-row {
+display: flex;
+gap: 15px; /* Espaço entre os itens */
+justify-content: space-between; /* Mantém uma boa distribuição */
+
+}
+
+.form-column {
+flex: 1; /* Cada coluna ocupa o mesmo espaço */
+display: flex;
+flex-direction: column;
+
+}
+
+.valor-input {
+display: flex;
+align-items: center;    
+}
+
+.valor-input .currency {
+font-size: 18px;
+margin-right: 10px;
+}
+
+.valor-input input {
+flex: 1;
+padding: 5px;
+font-size: 16px;
+border: 1px solid #edb9fd;
+border-radius: 5px;
+}
+
+.toggle-switch {
+position: relative;
+display: inline-block;
+width: 40px;
+height: 20px;
+}
+
+.toggle-switch input {
+display: none;
+}
+
+.switch-slider {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+border-radius: 20px;
+transition: 0.4s;
+}
+
+.switch-slider:before {
+position: absolute;
+content: "";
+height: 14px;
+width: 14px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+border-radius: 50%;
+transition: 0.4s;
+}
+
+input:checked + .switch-slider {
+background-color: #4f46e5;
+}
+
+input:checked + .switch-slider:before {
+transform: translateX(20px);
+}
+
+/* Botões do formulario */
+.submit-btn {
+background-color: #4f46e5;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.submit-btn:hover {
+background-color: #3c3aba;
+}
+
+.cancel-btn {
+background: none;
+border: none;
+color: #888;
+cursor: pointer;
+margin-left: 10px;
+}
+
+.cancel-btn:hover {
+color: #555;
+}
+
+
+input {
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 14px;
+width: 100%;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px; /* espaço entre opções */
+  align-items: center;
+  margin-bottom: 16px; /* distância abaixo do grupo */
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* espaço entre o radio e o texto */
+  font-weight: 500;
+}
+
+.icon-modify {
+  margin-left: 6px;
+  font-size: 18px;
+}
+
+.far.fa-user.icon-modify {
+  color: #3498db; /* Azul para usuário individual */
+}
+
+.fas.fa-users.icon-modify {
+  color: #9b59b6; /* Roxo para grupo */
+}
+
+
+
+
+
+
+
+
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color:  #7606fe72;
+}
+
+  
+  
+  
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espaço entre imagem e texto */
+    margin-left: 40px;
+    justify-content: space-between;
+    background-color: rgb (217, 204, 224);
+    margin: 3px;
+}
+  
+.logo-container img {
+    width: 30px;
+    height: 30px;
+    margin-right: 2px;
+    margin-left: -5px;
+}
+  
+.logo-text {
+    font-size: 20px;   /* Aumente o número conforme quiser */
+     /* Deixa mais forte */
+    color: #2c2c2c;
+}
+    
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    background-color: #ecf0f1;
+    padding-top: 50px;
+}
+
+.content {
+    background-color: #fff;
+    border-radius: 15px;
+    width: 960px;
+    height: 60%;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.content::before {
+    content: "";
+    position: absolute;
+    background-color: #7606fe72;
+    width: 40%;
+    height: 100%;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    left: 0;
+}
+
+.title {
+    font-size: 28px;
+
+    text-transform: capitalize;
+}
+
+.title-primary {
+    color: #fff;
+}
+
+.title-second {
+    margin-bottom: 10px;
+    color: #7606fe72;
+
+}
+
+.description {
+    font-size: 14px;
+    
+    line-height: 30px;
+}
+
+.description-primary {
+    color: #fff;
+}
+
+.description-second {
+    color: #7f8c8d;
+}
+
+.btn {
+    border-radius: 15px;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 10px;
+    padding: 12px 50px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 180px;
+    align-self: center;
+    border: none;
+    margin-top: 1rem;
+}
+
+.btn-primary {
+    background-color: transparent;
+    border: 1px solid #fff;
+    transition: background-color .5s;
+}
+
+.btn-primary:hover {
+    background-color: #fff;
+    color: #7606fe72;
+}
+
+.btn-second {
+    background-color: #7606fe72;
+    border: 1px solid #7606fe72;
+    transition: background-color .5s;
+}
+
+.btn-second:hover {
+    background-color: #fff;
+    border: 1px solid #7606fe72;
+    color: #7606fe72;
+}
+
+.first-content {
+    display: flex;
+}
+
+.first-content .second-column {
+    z-index: 11;
+}
+
+.first-column {
+    text-align: center;
+    width: 40%;
+    z-index: 10;
+}
+
+.second-column {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.social-media {
+    margin: 1rem 0;
+}
+
+.link-social-media:not(:first-child){
+    margin-left: 10px;
+}
+
+.link-social-media .item-social-media {
+    transition: background-color .5s;
+}
+
+.link-social-media:hover .item-social-media{
+    background-color: #7606fe72;;
+    color: #fff;
+    border-color: #7606fe72;
+}
+
+.list-social-media {
+    display: flex;
+    list-style-type: none;
+}
+
+.item-social-media {
+    border: 1px solid #bdc3c7;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #95a5a6;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+}
+
+.form input {
+    height: 45px;
+    width: 100%;
+    border: none;
+    background-color: #ecf0f1;
+
+}
+
+input:-webkit-autofill 
+{    
+    -webkit-box-shadow: 0 0 0px 1000px #ecf0f1 inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+
+.form-group-inline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.label-input {
+  
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  padding: 5px 10px;
+  font-weight: bold;
+  min-width: 100px;
+  border-radius: 4px;
+  
+}
+.form-group {
+  display: flex;
+  align-items: center; /* alinha verticalmente ícone, label e input */
+  margin-bottom: 15px;
+  margin-right: 30px;
+  margin-left: -50px;
+}
+
+.form-group label {
+  margin: 0 8px 0 5px;
+  font-weight: bold;
+  white-space: nowrap;
+  
+
+  
+}
+
+.form-group input {
+  height: 40px;
+  width: 100%;
+  border: none;
+  background-color: #ecf0f1;
+  padding-left: 10px;
+  margin-right: -29px;
+
+  
+  
+}
+
+.icon-modify {
+  color: #7f8c8d;
+  padding: 0 5px;
+  font-size: 16px;
+}
+
+
+/*.icon-modify {
+    color: #7f8c8d;
+    padding: 0 5px;
+}
+    *
+
+/* second content*/
+
+.second-content {
+    position: absolute;
+    display: flex;
+}
+
+.second-content .first-column {
+    order: 2;
+    z-index: -1;
+}
+
+.second-content .second-column {
+    order: 1;
+    z-index: -1;
+}
+
+.password {
+    color: #34495e;
+    font-size: 14px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.password::first-letter {
+    text-transform: capitalize;
+}
+
+
+
+.sign-in-js .first-content .first-column {
+    z-index: -1;
+}
+
+.sign-in-js .second-content .second-column {
+    z-index: 11;
+}
+
+.sign-in-js .second-content .first-column {
+    z-index: 13;
+}
+
+.sign-in-js .content::before {
+    left: 60%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    animation: slidein 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
+
+    z-index: 12;
+}
+
+.sign-up-js .content::before {
+    animation: slideout 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
+
+    z-index: 12;
+}
+
+.sign-up-js .second-content .first-column,
+.sign-up-js .second-content .second-column {
+    z-index: -1;
+}
+
+.sign-up-js .first-content .second-column {
+    z-index: 11;
+}
+
+.sign-up-js .first-content .first-column {
+    z-index: 13;    
+}
+
+
+/* DESLOCAMENTO CONTEÚDO ATRÁS DO CONTENT:BEFORE*/
+.sign-in-js .first-content .second-column {
+
+    z-index: -1;
+    position: relative;
+    animation: deslocamentoEsq 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
+}
+
+.sign-up-js .second-content .second-column {
+    position: relative;
+    z-index: -1;
+    animation: deslocamentoDir 1.3s; /*MODIFIQUEI DE 3s PARA 1.3s*/
+}
+
+/*ANIMAÇÃOO CSS PARA O CONTEÚDO*/
+
+@keyframes deslocamentoEsq {
+
+    from {
+        left: 0;
+        opacity: 1;
+        z-index: 12;
+    }
+
+    25% {
+        left: -80px;
+        opacity: .5;
+        /* z-index: 12; NÃO HÁ NECESSIDADE */
+    }
+
+    50% {
+        left: -100px;
+        opacity: .2;
+        /* z-index: 12; NÃO HÁ NECESSIDADE */
+    }
+
+    to {
+        left: -110px;
+        opacity: 0;
+        z-index: -1;
+    }
+}
+
+
+@keyframes deslocamentoDir {
+
+    from {
+        left: 0;
+        z-index: 12;
+    }
+
+    25% {
+        left: 80px;
+        /* z-index: 12;  NÃO HÁ NECESSIDADE*/
+    }
+
+    50% {
+        left: 100px;
+        /* z-index: 12; NÃO HÁ NECESSIDADE*/
+        /* background-color: yellow;  Exemplo que dei no vídeo*/
+    }
+
+    to {
+        left: 110px;
+        z-index: -1;
+    }
+}
+
+
+/*ANIMAÇÃO CSS*/
+
+@keyframes slidein {
+
+    from {
+        left: 0;
+        width: 40%;
+    }
+
+    25% {
+        left: 5%;
+        width: 50%;
+    }
+
+    50% {
+        left: 25%;
+        width: 60%;
+    }
+
+    75% {
+        left: 45%;
+        width: 50%;
+    }
+
+    to {
+        left: 60%;
+        width: 40%;
+    }
+}
+
+@keyframes slideout {
+
+    from {
+        left: 60%;
+        width: 40%;
+    }
+
+    25% {
+        left: 45%;
+        width: 50%;
+    }
+
+    50% {
+        left: 25%;
+        width: 60%;
+    }
+
+    75% {
+        left: 5%;
+        width: 50%;
+    }
+
+    to {
+        left: 0;
+        width: 40%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

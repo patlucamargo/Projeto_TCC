@@ -30,11 +30,11 @@ if (isset($_POST['submit']) && !empty($_POST['email'] && !empty($_POST['senha'])
             $_SESSION['grupo_familiar'] = $chkUser['grupo_familiar'];
             $_SESSION['senha']          = $chkUser['senha'];
 
-            if ($chkUser['nivel_acesso'] == 'admin') {
-                header('Location: telaAdmin.php'); // Página para administradores
-            } else {
+            //if ($chkUser['nivel_acesso'] == 'admin') {
+                //header('Location: telaAdmin.php'); // Página para administradores
+            //} else {
                 header('Location: telaHome.php'); // Página para usuários comuns
             }
         }
     }
-}
+

@@ -20,6 +20,7 @@ class Receita
 
         try {
             $this->pdo = new PDO($dns, $username, $password);
+
             return $this->pdo !== null;
         } catch (Exception $e) {
             return false;
@@ -144,8 +145,7 @@ class Receita
         return $alterar->execute();
     }
 
-    public function receitasPendentes($id)
-    {
+    public function receitasPendentes($id){
         $sql = "SELECT SUM(valor) AS total_receitas FROM receitas WHERE id_usuario = :id AND pago = '0'";
         $sql = $this->pdo->prepare($sql);
         $sql->bindValue(":id", $id);

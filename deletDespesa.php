@@ -1,22 +1,15 @@
 <?php
+session_start();
 
 if (!empty($_GET['id'])) {
     
-    include_once('config.php');
+    include "Classes\Despesa.class.php";
+    $desc = $despesa = new Despesa();
 
     $id = $_GET['id'];
 
-    $sqlSelect = "SELECT * FROM despesas WHERE id=$id";
-
-    $result = $pdo->query($sqlSelect);
-
-    if($result->num_rows > 0){
-       
-        $sqlDelete = "DELETE FROM despesas where id=$id";
-        $resultDelete = $pdo->query($sqlDelete);    
-        
+    $despesa->deletdespesas($id);
     }      
-}
 
 header('Location: telaDespesa.php');
 

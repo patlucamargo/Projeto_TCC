@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Financing</title>
+  <link rel="stylesheet" href="formularioCadastroGrupo.css">
+  <link rel="shortcut icon" href="imagem/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+
+<body>
+  <div class="contain">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="imagem/logo_Fam_Finan.png" alt="Ícone" class="navbar-icon">
+        <span class="project-name">Family Financing</span>
+      </div>
+      <div class="navbar-right">
+        
+       
+        <button class="logout-btn"><a href="telaHome.php">Voltar ao Home</a></button>
+      </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <main class="main-container">
+
+      <header class="header">
+  
+        <button id="nova-receita-btn" onclick="abrirModal()" class="logout-btn">Convidar pessoas</a></button>
+      </header>
+
+
+       <div class="container">
+        <div class="content first-content"> <!--  Primeiro conteudo - Primeira parte -->
+            <div class="first-column"> <!--  Primeira coluna -->
+                <h2 class="title title-primary">Registre seu grupo</h2>
+                <p class="description description-primary">Inicie hoje mesmo sua trajetoria de sucesso financeiro,</p>
+                <p class="description description-primary">e de o primeiro passo para alcançar juntos a estabilidade
+                <p class="description description-primary"> e o sucesso economico</p></p>
+                
+            </div>
+            <div class="second-column"> <!--  Segunda coluna -->
+                <h2 class="title title-second">Criar um grupo financeiro</h2>
+
+                <form class="form" action="formularioCadastro.php" method="POST"> <!--  Inicio formulário de cadastro-->
+                    <label class="label-input" for="">
+                        <i class="far fa-user icon-modify"></i>
+                        <input type="text" name="nome" placeholder="Nome">
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="far fa-envelope icon-modify"></i>
+                        <input type="email" name="email" placeholder="E-mail">
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="fas fa-lock icon-modify"></i>
+                        <input type="password" name="senha" placeholder="Senha">
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="far fa-user icon-modify"></i>
+                        <input type="text" name="login" placeholder="Como gostaria de ser chamado">
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="fas fa-users icon-modify"></i>
+                        <input type="text" name="grupo_familiar" placeholder="Nome do grupo familiar">
+                    </label>
+
+                    <button class="btn btn-second" name="enviar">Cadastrar</button>
+                </form> <!--  Fim formulário-->
+            </div> <!--  Fim da second column -->
+        </div> <!--  Fim da first content -->
+
+     
+          
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- Formulário de Receita -->
+  <div class="form-container" id="form-container">
+    <div class="formulario">
+      <form id="form-receita" action="inserirReceita.php" method="POST">
+        <header class="form-header">
+          <h2>Parabens!!!</h2>
+          <button type="button" class="close-btn" id="close-btn">&times;</button>
+        </header>
+
+        <div>
+          <h3>Você criou um grupo financeiro</h3>
+        </div> <br>
+
+        <div>
+          <h4>Gostaria de convidar mais pessoas?</h4>
+        </div>
+        <br>
+
+        <!-- Valor -->
+        <div class="form-group">
+          <label for="valor">Nome:</label>
+          <div class="valor-input">
+            <span class="currency"></span>
+            <input type="text" name="nome" placeholder="" required>
+          </div>
+        </div>
+
+        <!-- Categoria -->
+        <div class="form-group">
+          <label for="Categoria">E-mail:</label>
+          <div class="valor-input">
+            <input type="email" name="email" placeholder="" required>
+          </div>
+        </div>
+
+        
+      
+        <!-- Botões -->
+        <div class="form-footer">
+          <button type="submit" name="submit" class="submit-btn">Enviar convite</button>
+          <button type="button" class="cancel-btn" id="cancel-btn"> Cancelar</a></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+      
+
+  <script src="formularioCadastroGrupo.js"></script>
+
+</body>
+
+</html>
